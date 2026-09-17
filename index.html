@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Sapporo 2026 · Family Trip Dashboard</title>
+<style>
+:root{
+  --navy:#0d1b2a;--blue:#1a4080;--sky:#2563eb;--sky-l:#eff6ff;--sky-m:#bfdbfe;
+  --teal:#0891b2;--green:#059669;--amber:#d97706;--red:#dc2626;--purple:#7c3aed;
+  --ink:#0f172a;--ink2:#334155;--muted:#64748b;--border:#e2e8f0;
+  --surface:#f8fafc;--white:#fff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Malgun Gothic",sans-serif;
+  background:var(--surface);color:var(--ink);min-height:100vh;
+  padding-bottom:72px;font-size:15px;line-height:1.5;
+}
+/* ── LANG ── */
+body.lang-en .ko{display:none!important}
+body.lang-ko .en{display:none!important}
+
+/* ── TOP BAR ── */
+.topbar{
+  position:sticky;top:0;z-index:900;
+  background:rgba(13,27,42,0.97);
+  backdrop-filter:blur(12px);
+  box-shadow:0 2px 12px rgba(0,0,0,0.35);
+}
+.topbar-inner{max-width:740px;margin:0 auto;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.site-title{font-size:0.88rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:7px;letter-spacing:-.2px}
+.lang-pill{display:flex;background:rgba(255,255,255,.12);border-radius:99px;padding:2px;gap:1px;flex-shrink:0}
+.lang-btn{border:none;background:transparent;color:rgba(255,255,255,.65);padding:4px 12px;border-radius:99px;font-size:0.74rem;font-weight:700;cursor:pointer;transition:all .18s}
+.lang-btn.active{background:#fff;color:var(--navy)}
+
+/* ── TAB NAV ── */
+.tabnav{background:var(--white);border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:43px;z-index:800}
+.tabnav::-webkit-scrollbar{display:none}
+.tabnav-inner{max-width:740px;margin:0 auto;display:flex}
+.tab{flex:1 0 auto;padding:11px 13px;font-size:0.8rem;font-weight:700;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .18s;text-align:center;margin-bottom:-2px}
+.tab.active{color:var(--sky);border-bottom-color:var(--sky);background:rgba(37,99,235,.04)}
+.tab:hover:not(.active){color:var(--ink2)}
+
+/* ── PAGES ── */
+.page{display:none}.page.active{display:block}
+.wrap{max-width:740px;margin:0 auto;padding:16px 14px}
+
+/* ── HERO BANNER ── */
+.hero{
+  background:linear-gradient(155deg,#06111f 0%,#0e2a5a 48%,#083d72 100%);
+  padding:26px 18px 22px;color:#fff;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;opacity:.04;
+  background-image:radial-gradient(circle,#fff 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.hero-inner{position:relative;z-index:1;max-width:740px;margin:0 auto}
+.hero h1{font-size:1.35rem;font-weight:900;letter-spacing:-.4px;margin-bottom:3px}
+.hero-sub{font-size:0.81rem;opacity:.72;margin-bottom:15px}
+.hero-chips{display:flex;gap:6px;flex-wrap:wrap}
+.hero-chip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 11px;font-size:0.72rem;font-weight:600;color:#fff}
+.dday-row{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.dday-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:9px 15px;text-align:center;min-width:70px}
+.dday-n{font-size:1.45rem;font-weight:900;color:#fff;line-height:1;display:block}
+.dday-l{font-size:0.6rem;color:rgba(255,255,255,.65);display:block;margin-top:3px}
+
+/* ── WEATHER ── */
+.wx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.wx-tile{background:var(--sky-l);border:1px solid var(--sky-m);border-radius:10px;padding:9px 5px;text-align:center}
+.wx-date{font-size:0.66rem;font-weight:700;color:var(--sky);margin-bottom:3px}
+.wx-icon{font-size:1.3rem;display:block;margin-bottom:3px}
+.wx-desc{font-size:0.65rem;color:var(--muted);margin-bottom:2px}
+.wx-temps{font-size:0.76rem;font-weight:700;color:var(--ink)}
+.wx-credit{font-size:0.65rem;color:var(--muted);text-align:right;margin-top:5px}
+.wx-loading{text-align:center;padding:16px;color:var(--muted);font-size:0.82rem}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:14px;padding:16px;margin-bottom:13px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
+.card-title{font-size:0.91rem;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+
+/* ── ALERTS ── */
+.alert{border-radius:10px;padding:11px 13px;margin-bottom:9px;font-size:0.82rem;line-height:1.5}
+.alert strong{display:block;font-weight:800;margin-bottom:2px}
+.alert-warn{background:#fffbeb;border-left:4px solid var(--amber)}
+.alert-ok{background:#ecfdf5;border-left:4px solid var(--green)}
+.alert-red{background:#fef2f2;border-left:4px solid var(--red)}
+.alert-sky{background:var(--sky-l);border-left:4px solid var(--sky)}
+.alert-purple{background:#faf5ff;border-left:4px solid var(--purple)}
+
+/* ── INFO GRID ── */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.info-chip{background:var(--surface);border-radius:9px;padding:9px 11px}
+.ic-lbl{font-size:0.67rem;color:var(--muted);display:block;margin-bottom:2px}
+.ic-val{font-size:0.83rem;font-weight:700;color:var(--ink);display:block}
+.ic-sub{font-size:0.72rem;color:var(--sky);margin-top:2px;display:block}
+
+/* ── ITINERARY TABS ── */
+.itin-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
+.itin-tab{padding:6px 13px;border-radius:99px;font-size:0.77rem;font-weight:700;border:2px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all .18s}
+.itin-tab.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.day-pane{display:none}.day-pane.active{display:block}
+
+/* ── DAY HERO IMAGE ── */
+.day-hero{border-radius:13px;overflow:hidden;margin-bottom:13px;position:relative;height:150px}
+.day-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.day-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,17,31,.87) 38%,rgba(6,17,31,.12) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:13px}
+.day-hero-ov h2{font-size:1rem;font-weight:900;color:#fff;margin-bottom:3px}
+.day-hero-ov p{font-size:0.74rem;color:rgba(255,255,255,.82)}
+
+/* ── TRACK BADGES ── */
+.ski-track{display:inline-flex;align-items:center;gap:5px;background:#dbeafe;color:#1e40af;border-radius:8px;padding:4px 10px;font-size:0.78rem;font-weight:700;margin-bottom:8px}
+.irene-track{display:inline-flex;align-items:center;gap:5px;background:#fce7f3;color:#9d174d;border-radius:8px;padding:4px 10px;font-size:0.78rem;font-weight:700;margin-bottom:8px}
+.family-track{display:inline-flex;align-items:center;gap:5px;background:#d1fae5;color:#065f46;border-radius:8px;padding:4px 10px;font-size:0.78rem;font-weight:700;margin-bottom:8px}
+
+/* ── TIMELINE ── */
+.tl{list-style:none}
+.tl-row{display:grid;grid-template-columns:58px 1fr;gap:0 10px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.tl-row:last-child{border-bottom:none}
+.tl-time{font-size:0.69rem;font-weight:800;color:var(--sky);text-align:right;padding-top:2px;line-height:1.4}
+.tl-time.red{color:var(--red)}
+.tl-body strong{font-size:0.85rem;font-weight:700;color:var(--ink);display:block;margin-bottom:2px}
+.tl-note{font-size:0.74rem;color:var(--muted);line-height:1.5}
+.tl-ok{font-size:0.71rem;color:var(--green);font-weight:700;display:block;margin-top:2px}
+.tl-warn{font-size:0.71rem;color:var(--red);font-weight:700;display:block;margin-top:2px}
+
+/* ── BOOKING HUB ── */
+.bk-cat{font-size:0.7rem;font-weight:800;color:var(--muted);letter-spacing:.05em;margin:15px 0 6px}
+.bk-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px;background:var(--white);margin-bottom:6px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.bk-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.bk-body{flex:1;min-width:0}
+.bk-name{font-size:0.85rem;font-weight:700;color:var(--ink)}
+.bk-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;line-height:1.4}
+.bk-tag{display:inline-flex;padding:2px 7px;border-radius:5px;font-size:0.66rem;font-weight:700;margin-top:3px}
+.tag-now{background:#fee2e2;color:var(--red)}
+.tag-oct{background:#fef3c7;color:#92400e}
+.tag-nov{background:#d1fae5;color:#065f46}
+.tag-done{background:var(--sky-l);color:#075985}
+.bk-btn{flex-shrink:0;display:inline-flex;align-items:center;background:var(--sky);color:#fff!important;text-decoration:none;padding:7px 11px;border-radius:7px;font-size:0.72rem;font-weight:700;white-space:nowrap;transition:opacity .18s;align-self:center}
+.bk-btn:hover{opacity:.87}
+.bk-btn.out{background:transparent;border:2px solid var(--sky);color:var(--sky)!important}
+
+/* ── CHECKLIST ── */
+.person-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
+.person-tab{padding:6px 12px;border-radius:99px;font-size:0.77rem;font-weight:700;border:2px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all .18s}
+.person-tab.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.p-pane{display:none}.p-pane.active{display:block}
+.chk-sec{font-size:0.74rem;font-weight:800;color:var(--sky);margin:12px 0 7px;letter-spacing:.04em}
+.chk-list{list-style:none}
+.chk-row{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)}
+.chk-row:last-child{border-bottom:none}
+.chk-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--sky);flex-shrink:0;margin-top:2px;cursor:pointer}
+.chk-lbl{font-size:0.83rem;flex:1;line-height:1.4;cursor:pointer}
+.chk-lbl.done{text-decoration:line-through;color:var(--muted)}
+.chk-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.95rem;padding:0 2px;flex-shrink:0;line-height:1}
+.add-row{display:flex;gap:7px;margin-top:9px}
+.add-row input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:7px 9px;font-size:0.82rem;color:var(--ink);background:var(--white)}
+.add-row input:focus{outline:none;border-color:var(--sky)}
+.add-btn{background:var(--sky);color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:0.82rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+/* ── BUDGET / CONVERTER ── */
+.conv-box{background:linear-gradient(140deg,#06111f,#0e2a5a);border-radius:14px;padding:16px;margin-bottom:13px}
+.conv-title{font-size:0.79rem;font-weight:800;color:rgba(255,255,255,.7);margin-bottom:11px}
+.conv-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.conv-sym{font-size:0.88rem;font-weight:800;color:#fff;min-width:25px}
+.conv-inp{flex:1;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);border-radius:8px;padding:9px 11px;font-size:0.95rem;font-weight:700;color:#fff;width:100%}
+.conv-inp::placeholder{color:rgba(255,255,255,.35)}
+.conv-inp:focus{outline:none;border-color:rgba(255,255,255,.5)}
+.rate-row{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
+.rate-row label{font-size:0.71rem;color:rgba(255,255,255,.6)}
+.rate-row input{width:80px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 8px;font-size:0.8rem;font-weight:700;color:#fff}
+.rate-row input:focus{outline:none;border-color:rgba(255,255,255,.5)}
+.live-badge{font-size:0.63rem;background:rgba(16,185,129,.25);color:#6ee7b7;padding:2px 7px;border-radius:99px;font-weight:700}
+.conv-swap{background:rgba(255,255,255,.15);border:none;border-radius:99px;color:#fff;cursor:pointer;padding:5px 12px;font-size:0.72rem;font-weight:700;margin-left:auto;transition:background .18s}
+.conv-swap:hover{background:rgba(255,255,255,.25)}
+
+/* Budget summary boxes */
+.bud-summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.bud-box{background:var(--white);border-radius:11px;padding:12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.bud-val{font-size:1.15rem;font-weight:800;color:var(--ink);display:block}
+.bud-lbl{font-size:0.68rem;color:var(--muted);margin-top:2px}
+
+/* Budget table */
+.bud-scroll{overflow-x:auto;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.bud-table{width:100%;border-collapse:collapse;font-size:0.79rem;min-width:500px}
+.bud-table th{background:var(--sky-l);color:var(--sky);padding:8px 8px;text-align:left;font-weight:700;font-size:0.72rem;white-space:nowrap}
+.bud-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.bud-table .cat-hdr td{background:var(--navy);color:#fff;font-weight:800;font-size:0.72px;padding:6px 8px;font-size:0.72rem}
+.bud-table .grand td{background:var(--sky-l);font-weight:800;color:var(--sky)}
+.act-inp{width:88px;border:1.5px solid var(--border);border-radius:6px;padding:4px 5px;font-size:0.78rem;font-weight:700;color:var(--ink);background:var(--white)}
+.act-inp:focus{outline:none;border-color:var(--sky)}
+.cur-sel{border:1px solid var(--border);border-radius:5px;font-size:0.68rem;padding:3px 4px;background:var(--white);margin-top:3px;display:block}
+.diff-pos{color:var(--green);font-weight:700}
+.diff-neg{color:var(--red);font-weight:700}
+.diff-zero{color:var(--muted)}
+
+/* Add extra */
+.extra-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.extra-row input{flex:1;min-width:90px;border:1.5px solid var(--border);border-radius:8px;padding:7px 8px;font-size:0.81rem;color:var(--ink)}
+.extra-row input:focus{outline:none;border-color:var(--sky)}
+.extra-row .add-btn{white-space:nowrap}
+
+/* ── MISC ── */
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:0.68rem;font-weight:700}
+.badge-sky{background:var(--sky-l);color:#075985}
+.badge-ok{background:#d1fae5;color:#065f46}
+.badge-warn{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:var(--red)}
+
+.spot-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.spot-chip{background:var(--surface);border-radius:9px;padding:10px 11px}
+.spot-name{font-size:0.82rem;font-weight:700;color:var(--ink)}
+.spot-desc{font-size:0.71rem;color:var(--muted);margin-top:2px;line-height:1.4}
+
+@media(max-width:420px){
+  .wx-grid{grid-template-columns:repeat(2,1fr)}
+  .info-grid{grid-template-columns:1fr}
+  .spot-grid{grid-template-columns:1fr}
+  .bud-summary{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body class="lang-en">
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="site-title">⛷️
+      <span class="en">Sapporo 2026 · Family Dashboard</span>
+      <span class="ko">삿포로 2026 · 가족 대시보드</span>
+    </div>
+    <div class="lang-pill">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en',this)">EN</button>
+      <button class="lang-btn" id="btn-ko" onclick="setLang('ko',this)">한국어</button>
+    </div>
+  </div>
+  <div class="tabnav">
+    <div class="tabnav-inner">
+      <button class="tab active" onclick="showPage('home',this)"><span class="en">🏠 Home</span><span class="ko">🏠 홈</span></button>
+      <button class="tab" onclick="showPage('itin',this)"><span class="en">📅 Itinerary</span><span class="ko">📅 일정</span></button>
+      <button class="tab" onclick="showPage('booking',this)"><span class="en">🔗 Booking Hub</span><span class="ko">🔗 예약 허브</span></button>
+      <button class="tab" onclick="showPage('check',this)"><span class="en">✅ Checklist</span><span class="ko">✅ 체크리스트</span></button>
+      <button class="tab" onclick="showPage('budget',this)"><span class="en">💰 Budget</span><span class="ko">💰 예산</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1 class="en">Sapporo Family Ski &amp; City Trip</h1>
+      <h1 class="ko">삿포로 (Sapporo) 가족 스키 &amp; 시티 여행</h1>
+      <div class="hero-sub en">Dec 30, 2026 (Wed) – Jan 2, 2027 (Sat) · 3 nights · Korean Air KE765 / KE766</div>
+      <div class="hero-sub ko">2026년 12/30(수) – 2027년 1/2(토) · 3박 4일 · 대한항공 (Korean Air) KE765 / KE766</div>
+      <div class="hero-chips">
+        <span class="hero-chip en">✈️ KE765 · ICN T2 10:05→CTS 12:45</span>
+        <span class="hero-chip ko">✈️ KE765 · 인천 T2 10:05→삿포로 12:45</span>
+        <span class="hero-chip en">🏨 Keio Plaza Hotel · Triple Room</span>
+        <span class="hero-chip ko">🏨 게이오 플라자 (Keio Plaza) · 트리플룸</span>
+        <span class="hero-chip en">⛷️ Dad &amp; Alex · 👜 Irene city tour</span>
+        <span class="hero-chip ko">⛷️ 아빠·예준 스키 · 👜 아이린 시내 관광</span>
+      </div>
+      <div class="dday-row">
+        <div class="dday-box"><span class="dday-n" id="dd-n">–</span><span class="dday-l en">days to go</span><span class="dday-l ko">출발까지</span></div>
+        <div class="dday-box"><span class="dday-n">3N</span><span class="dday-l en">3 nights</span><span class="dday-l ko">3박</span></div>
+        <div class="dday-box"><span class="dday-n">⛷️×2</span><span class="dday-l en">ski days</span><span class="dday-l ko">스키 일수</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- LIVE WEATHER -->
+    <div class="card">
+      <div class="card-title">🌨 <span class="en">Sapporo Live Weather</span><span class="ko">삿포로 (Sapporo) 실시간 날씨</span></div>
+      <div id="wx-widget"><div class="wx-loading">Loading weather…</div></div>
+    </div>
+
+    <!-- FLIGHT INFO -->
+    <div class="card">
+      <div class="card-title">✈️ <span class="en">Confirmed Flights</span><span class="ko">확정 항공편</span></div>
+      <div class="alert alert-ok" style="margin-bottom:9px">
+        <span class="en">✅ KE765 &amp; KE766 purchased · Total ₩2,600,000</span>
+        <span class="ko">✅ KE765 &amp; KE766 구매 완료 · 총 ₩2,600,000</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-chip">
+          <span class="ic-lbl en">Outbound · Dec 30 (Wed)</span>
+          <span class="ic-lbl ko">출국 · 12/30 (수)</span>
+          <span class="ic-val">KE765 · ICN T2 → CTS</span>
+          <span class="ic-sub">10:05 → 12:45 (2h 40m)</span>
+        </div>
+        <div class="info-chip">
+          <span class="ic-lbl en">Return · Jan 2 (Sat)</span>
+          <span class="ic-lbl ko">귀국 · 1/2 (토)</span>
+          <span class="ic-val">KE766 · CTS → ICN T2</span>
+          <span class="ic-sub">14:05 → 17:00 est.</span>
+        </div>
+        <div class="info-chip">
+          <span class="ic-lbl en">Check-in / Parking</span>
+          <span class="ic-lbl ko">탑승수속 / 주차</span>
+          <span class="ic-val en">ICN T2 · Valet (Samsung Prestige)</span>
+          <span class="ic-val ko">인천 T2 · 발렛파킹 (삼성 Prestige)</span>
+          <span class="ic-sub en">Free valet · pre-book required</span>
+          <span class="ic-sub ko">무료 발렛 · 사전 예약 필수</span>
+        </div>
+        <div class="info-chip">
+          <span class="ic-lbl en">Hotel</span>
+          <span class="ic-lbl ko">호텔</span>
+          <span class="ic-val en">Keio Plaza · Standard Triple</span>
+          <span class="ic-val ko">게이오 플라자 (Keio Plaza) · Standard Triple</span>
+          <span class="ic-sub">31.4m² · 3 beds · ski shuttle</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHO DOES WHAT -->
+    <div class="card">
+      <div class="card-title">👨‍👩‍👦 <span class="en">Family Track Overview</span><span class="ko">가족 일정 트랙 요약</span></div>
+      <div class="info-grid" style="grid-template-columns:1fr 1fr">
+        <div class="info-chip" style="border-left:3px solid var(--sky)">
+          <span class="ic-lbl en">⛷️ Dad (Minsu) &amp; Alex</span>
+          <span class="ic-lbl ko">⛷️ 아빠 (민수) &amp; 예준</span>
+          <span class="ic-val en">Ski 2 days</span>
+          <span class="ic-val ko">스키 2일</span>
+          <span class="ic-sub en">Dec 31: Teine Olympic · Jan 1: Kokusai Powder</span>
+          <span class="ic-sub ko">12/31: 테이네 (Teine) 올림픽 · 1/1: 국제 (Kokusai) 파우더</span>
+        </div>
+        <div class="info-chip" style="border-left:3px solid var(--purple)">
+          <span class="ic-lbl en">👜 Irene (Mom)</span>
+          <span class="ic-lbl ko">👜 아이린 (엄마)</span>
+          <span class="ic-val en">Sapporo city sightseeing</span>
+          <span class="ic-val ko">삿포로 (Sapporo) 시내 관광</span>
+          <span class="ic-sub en">Dec 31 &amp; Jan 1 · solo explore</span>
+          <span class="ic-sub ko">12/31 &amp; 1/1 · 혼자 시내 관광</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- URGENT ALERTS -->
+    <div class="card">
+      <div class="card-title">⚠️ <span class="en">Action Items</span><span class="ko">확인 필요 사항</span></div>
+      <div class="alert alert-red">
+        <strong class="en">🔴 Book NOW — peak season filling fast</strong>
+        <strong class="ko">🔴 즉시 예약 — 성수기 마감 임박</strong>
+        <span class="en">Samsung Prestige valet parking (ICN T2, pre-book required) · Keio Plaza Triple Room</span>
+        <span class="ko">삼성 Prestige 발렛파킹 사전 예약 (인천 T2) · 게이오 플라자 (Keio Plaza) 트리플룸</span>
+      </div>
+      <div class="alert alert-warn">
+        <strong class="en">🟡 By mid-October</strong><strong class="ko">🟡 10월 중순까지</strong>
+        <span class="en">Crab dinner Dec 31 · Teine Bigruns bus Dec 31 · Kokusai bus pack Jan 1 · Onsen age-17 confirm</span>
+        <span class="ko">게 요리 12/31 예약 · 테이네 (Teine) 빅런즈 버스 12/31 · 국제 스키장 버스팩 1/1 · 온천 17세 입장 확인</span>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ ITINERARY ══════════ -->
+<div id="page-itin" class="page">
+  <div class="wrap">
+    <div class="itin-tabs">
+      <button class="itin-tab active" onclick="showDay('d1',this)"><span class="en">Dec 30</span><span class="ko">12/30</span></button>
+      <button class="itin-tab" onclick="showDay('d2',this)"><span class="en">Dec 31</span><span class="ko">12/31</span></button>
+      <button class="itin-tab" onclick="showDay('d3',this)"><span class="en">Jan 1</span><span class="ko">1/1</span></button>
+      <button class="itin-tab" onclick="showDay('d4',this)"><span class="en">Jan 2</span><span class="ko">1/2</span></button>
+    </div>
+
+    <!-- ── DAY 1 · DEC 30 ── -->
+    <div id="day-d1" class="day-pane active">
+      <div class="day-hero">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=700&q=75" alt="Sapporo city night" loading="lazy">
+        <div class="day-hero-ov">
+          <h2 class="en">Day 1 · Dec 30 — Arrival + Sapporo City Night</h2>
+          <h2 class="ko">1일차 · 12/30 — 도착 + 삿포로 (Sapporo) 시내 저녁</h2>
+          <p class="en">KE765 arrives 12:45 · Hotel check-in · Odori illumination · Nemuro Hanamaru sushi</p>
+          <p class="ko">KE765 12:45 도착 · 호텔 체크인 · 오도리 공원 (Odori Park) 일루미네이션 · 네무로 하나마루 (Nemuro Hanamaru) 스시</p>
+        </div>
+      </div>
+
+      <div class="alert alert-sky" style="margin-bottom:12px">
+        <strong class="en">🔵 No skiing today — arrive 12:45, hotel check-in ~14:30</strong>
+        <strong class="ko">🔵 오늘은 스키 없음 — 12:45 도착, 호텔 체크인 약 14:30</strong>
+        <span class="en">All 3 together. Explore Sapporo city, evening sushi dinner at Nemuro Hanamaru.</span>
+        <span class="ko">3인 모두 함께. 삿포로 (Sapporo) 시내 탐색, 저녁 네무로 하나마루 (Nemuro Hanamaru) 스시.</span>
+      </div>
+
+      <!-- ALL TOGETHER -->
+      <div class="card">
+        <div class="family-track">🌏 Family Together</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">07:00</div><div class="tl-body"><strong class="en">Depart home → ICN T2 (by car)</strong><strong class="ko">자차로 인천공항 T2 출발</strong><span class="tl-note en">Allow 60–90 min · target airport 08:00</span><span class="tl-note ko">60–90분 여유 · 목표 08:00 공항 도착</span></div></li>
+          <li class="tl-row"><div class="tl-time">08:00</div><div class="tl-body"><strong class="en">ICN T2 Valet Parking drop-off</strong><strong class="ko">인천 T2 발렛파킹 차량 인도</strong><span class="tl-note en">T2 B1 short-term lot valet lane → receive voucher</span><span class="tl-note ko">T2 지하 1층 단기주차장 발렛 차로 → 보관증 수령</span><span class="tl-ok en">✅ Samsung Prestige — valet free (pre-booked)</span><span class="tl-ok ko">✅ 삼성 Prestige — 발렛 무료 (사전 예약 완료)</span></div></li>
+          <li class="tl-row"><div class="tl-time">08:30</div><div class="tl-body"><strong class="en">Check-in &amp; security · KE765</strong><strong class="ko">탑승수속 &amp; 보안검색 · KE765</strong><span class="tl-note en">Korean Air T2 counters · online check-in preferred</span><span class="tl-note ko">대한항공 (Korean Air) T2 카운터 · 온라인 체크인 권장</span></div></li>
+          <li class="tl-row"><div class="tl-time">10:05</div><div class="tl-body"><strong class="en">✈️ KE765 Departs ICN T2</strong><strong class="ko">✈️ KE765 인천 T2 출발</strong><span class="tl-note en">2h 40m nonstop · in-flight meal provided</span><span class="tl-note ko">2시간 40분 직항 · 기내식 제공</span></div></li>
+          <li class="tl-row"><div class="tl-time">12:45</div><div class="tl-body"><strong class="en">Arrive New Chitose (CTS)</strong><strong class="ko">신치토세 공항 (CTS) 도착</strong><span class="tl-note en">Immigration · Visit Japan Web QR · collect bags</span><span class="tl-note ko">입국 심사 · Visit Japan Web QR · 수하물 수취</span></div></li>
+          <li class="tl-row"><div class="tl-time">13:30</div><div class="tl-body"><strong class="en">JR Rapid Airport → Sapporo Stn (37 min · ¥1,150)</strong><strong class="ko">JR 쾌속 에어포트 → 삿포로역 (37분 · ¥1,150)</strong><span class="tl-note en">B1F platform · reserved seat recommended</span><span class="tl-note ko">B1F 승강장 · 지정석 추천</span></div></li>
+          <li class="tl-row"><div class="tl-time">14:30</div><div class="tl-body"><strong class="en">Check-in: Keio Plaza Hotel</strong><strong class="ko">게이오 플라자 호텔 (Keio Plaza Hotel) 체크인</strong><span class="tl-note en">5-min walk from JR west exit · Standard Triple 31.4m²</span><span class="tl-note ko">JR역 서쪽 출구 도보 5분 · Standard Triple 31.4m²</span></div></li>
+          <li class="tl-row"><div class="tl-time">15:30</div><div class="tl-body"><strong class="en">❄️ Odori Park White Illumination (all 3)</strong><strong class="ko">❄️ 오도리 공원 (Odori Park) 화이트 일루미네이션 (3인 함께)</strong><span class="tl-note en">15-min walk · Sapporo TV Tower photo · Winter light festival · free</span><span class="tl-note ko">도보 15분 · TV타워 (TV Tower) 사진 · 겨울 조명 축제 · 무료</span></div></li>
+          <li class="tl-row"><div class="tl-time">16:30</div><div class="tl-body"><strong class="en">Queue number at Nemuro Hanamaru (JR Tower 6F)</strong><strong class="ko">네무로 하나마루 (Nemuro Hanamaru) 번호표 발권 (JR 타워 6F)</strong><span class="tl-note en">Wait ~40-60 min · browse JR Tower mall while waiting</span><span class="tl-note ko">대기 약 40–60분 · JR 타워 쇼핑몰 둘러보기</span></div></li>
+          <li class="tl-row"><div class="tl-time">18:30</div><div class="tl-body"><strong class="en">🍣 Nemuro Hanamaru — Sushi Dinner</strong><strong class="ko">🍣 네무로 하나마루 (Nemuro Hanamaru) — 스시 만찬</strong><span class="tl-note en">Hokkaido's best rotating sushi · scallop, salmon, sweet shrimp, uni · ¥4,000–6,000/person</span><span class="tl-note ko">홋카이도 (Hokkaido) 최고 회전초밥 · 가리비·연어·단새우·성게알(우니) · ¥4,000–6,000/인</span></div></li>
+          <li class="tl-row"><div class="tl-time">21:00</div><div class="tl-body"><strong class="en">Return to hotel · rest (early start tomorrow)</strong><strong class="ko">호텔 복귀 · 휴식 (내일 이른 출발)</strong><span class="tl-note en">Pick up Hokkaido milk &amp; pudding at Seico Mart</span><span class="tl-note ko">세이코마트 (Seico Mart)에서 홋카이도 우유 &amp; 푸딩 구매</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── DAY 2 · DEC 31 ── -->
+    <div id="day-d2" class="day-pane">
+      <div class="day-hero">
+        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=700&q=75" alt="Ski slope powder snow" loading="lazy">
+        <div class="day-hero-ov">
+          <h2 class="en">Day 2 · Dec 31 — Teine Olympic + NYE</h2>
+          <h2 class="ko">2일차 · 12/31 — 테이네 (Teine) 올림픽 코스 + 신년 전야</h2>
+          <p class="en">Dad &amp; Alex: 1972 Olympic slopes · Irene: Maruyama &amp; Susukino · Crab dinner + NYE countdown</p>
+          <p class="ko">아빠·예준: 1972 올림픽 코스 · 아이린: 마루야마 (Maruyama) &amp; 스스키노 (Susukino) · 게 요리 + 신년 카운트다운</p>
+        </div>
+      </div>
+
+      <div class="alert alert-ok" style="margin-bottom:12px">
+        <span class="en">✅ Teine Dec 31 operating hours: 09:00–16:00 (night ski ends 18:00 only — no impact)</span>
+        <span class="ko">✅ 테이네 (Teine) 12/31 운영: 09:00–16:00 (야간 스키만 18:00 마감 — 가족 일정 영향 없음)</span>
+      </div>
+
+      <!-- DAD & ALEX -->
+      <div class="card">
+        <div class="ski-track">⛷️ Dad &amp; Alex — Teine Olympic Ski</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">07:00</div><div class="tl-body"><strong class="en">Hotel breakfast</strong><strong class="ko">호텔 조식</strong></div></li>
+          <li class="tl-row"><div class="tl-time">08:25</div><div class="tl-body"><strong class="en">Assemble at Keio Plaza lobby (Bigruns pickup)</strong><strong class="ko">게이오 플라자 (Keio Plaza) 로비 집합 (빅런즈 픽업)</strong></div></li>
+          <li class="tl-row"><div class="tl-time">08:35</div><div class="tl-body"><strong class="en">🚌 Bigruns Bus No.4401 → Teine</strong><strong class="ko">🚌 빅런즈 버스 (Bigruns Bus) No.4401 → 테이네 (Teine)</strong><span class="tl-note en">Keio Plaza lobby pickup · ⚠️ Pre-booking required</span><span class="tl-note ko">게이오 플라자 (Keio Plaza) 로비 탑승 · ⚠️ 사전 예약 필수</span></div></li>
+          <li class="tl-row"><div class="tl-time">09:25</div><div class="tl-body"><strong class="en">Arrive Teine Olympia Ski Center</strong><strong class="ko">테이네 올림피아 스키센터 (Teine Olympia Ski Center) 도착</strong><span class="tl-note en">On-site rental center → full set fitting ~20 min (suit, boots, skis, poles, helmet, goggles)</span><span class="tl-note ko">현장 렌탈 센터 → 풀세트 핏팅 약 20분 (스키복, 부츠, 스키, 스톡, 헬멧, 고글)</span></div></li>
+          <li class="tl-row"><div class="tl-time">09:50</div><div class="tl-body"><strong class="en">⛷️ Skiing — until 15:30</strong><strong class="ko">⛷️ 스키 활강 — 15:30까지</strong><span class="tl-note en">Dad guides Alex · Highland Zone: 1972 Olympic course with Ishikari Bay ocean view · Deep carving runs</span><span class="tl-note ko">아빠가 예준 리드 · 하이랜드 존 (Highland Zone): 1972 올림픽 코스, 이시카리만 오션뷰 · 깊은 카빙 활강</span></div></li>
+          <li class="tl-row"><div class="tl-time">12:00</div><div class="tl-body"><strong class="en">🍜 Highland Ski Center — Lunch</strong><strong class="ko">🍜 하이랜드 스키센터 (Highland Ski Center) 점심</strong><span class="tl-note en">Sapporo-style chashu ramen or gyudon · ¥1,200–1,800/person · Rest 15 min, back on slopes</span><span class="tl-note ko">삿포로식 차슈 라멘 또는 규동 · ¥1,200–1,800/인 · 15분 휴식 후 슬로프 복귀</span></div></li>
+          <li class="tl-row"><div class="tl-time">15:30</div><div class="tl-body"><strong class="en">Return equipment → Bigruns return bus 16:00</strong><strong class="ko">장비 반납 → 빅런즈 (Bigruns) 귀로 버스 16:00</strong><span class="tl-note en">Hotel arrival ~17:10 · Shower &amp; rest before NYE dinner</span><span class="tl-note ko">호텔 도착 약 17:10 · 샤워 &amp; 휴식 후 제야 저녁 합류</span></div></li>
+        </ul>
+      </div>
+
+      <!-- IRENE -->
+      <div class="card">
+        <div class="irene-track">👜 Irene — Sapporo City Day 1</div>
+        <p class="tl-note en" style="margin-bottom:10px">Solo city exploration while Dad &amp; Alex ski. All walkable or by subway from Keio Plaza.</p>
+        <p class="tl-note ko" style="margin-bottom:10px">아빠·예준 스키 중 아이린 혼자 시내 관광. 게이오 플라자 (Keio Plaza)에서 도보 또는 지하철.</p>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">09:00</div><div class="tl-body"><strong class="en">🌳 Maruyama Park &amp; Hokkaido Jingu Shrine — Hatsumode</strong><strong class="ko">🌳 마루야마 공원 (Maruyama Park) &amp; 홋카이도 신궁 (Hokkaido Jingu) — 하츠모우데 (Hatsumode)</strong><span class="tl-note en">Subway: Tozai Line → Maruyama Koen Stn (15 min, ¥250) · New Year's Eve spiritual walk · Free</span><span class="tl-note ko">지하철: 도자이선 (Tozai Line) → 마루야마 공원역 (Maruyama Koen Stn) (15분, ¥250) · 신년 전날 참배 · 무료</span></div></li>
+          <li class="tl-row"><div class="tl-time">11:00</div><div class="tl-body"><strong class="en">🍣 Solo Lunch: Toriton Kaiten Sushi (Maruyama area)</strong><strong class="ko">🍣 혼자 점심: 도리톤 (Toriton) 회전초밥 (마루야마 (Maruyama) 인근)</strong><span class="tl-note en">Fresh Hokkaido seafood · ¥2,000–3,000 · No reservation needed</span><span class="tl-note ko">신선한 홋카이도 (Hokkaido) 해산물 · ¥2,000–3,000 · 예약 불필요</span></div></li>
+          <li class="tl-row"><div class="tl-time">13:00</div><div class="tl-body"><strong class="en">🏛 Hokkaido Museum of Modern Art (10-min walk from hotel)</strong><strong class="ko">🏛 홋카이도 근대미술관 (Hokkaido Museum of Modern Art) (호텔에서 도보 10분)</strong><span class="tl-note en">Modern Japanese art collection · ¥510 · Warm &amp; peaceful on a cold NYE</span><span class="tl-note ko">근대 일본 미술 소장 · ¥510 · 추운 제야에 따뜻하게 감상</span></div></li>
+          <li class="tl-row"><div class="tl-time">15:00</div><div class="tl-body"><strong class="en">🛍 Tanuki Koji Covered Arcade &amp; Susukino</strong><strong class="ko">🛍 타누키코지 (Tanuki Koji) 아케이드 &amp; 스스키노 (Susukino)</strong><span class="tl-note en">180m indoor shopping street · warm &amp; sheltered · gifts, cosmetics, cafés</span><span class="tl-note ko">180m 실내 아케이드 · 따뜻한 실내 · 기념품, 화장품, 카페</span></div></li>
+          <li class="tl-row"><div class="tl-time">17:00</div><div class="tl-body"><strong class="en">Return to hotel · refresh before NYE dinner</strong><strong class="ko">호텔 복귀 · 제야 저녁 전 준비</strong></div></li>
+        </ul>
+      </div>
+
+      <!-- EVENING TOGETHER -->
+      <div class="card">
+        <div class="family-track">🎆 NYE Evening — All Together</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">18:00</div><div class="tl-body"><strong class="en">🦀 Hokkaido Crab Course Dinner</strong><strong class="ko">🦀 홋카이도 (Hokkaido) 게 코스 요리 저녁</strong><span class="tl-note en">Hyosetsu no Mon or Kani Honke · King crab sashimi + hairy crab shabu-shabu · ¥10,000+/person · ⚠️ Reserve by Oct</span><span class="tl-note ko">효세츠노몬 (Hyosetsu no Mon) 또는 가니혼케 (Kani Honke) · 대게 사시미 + 털게 샤브샤브 · ¥10,000+/인 · ⚠️ 10월 전 예약 필수</span></div></li>
+          <li class="tl-row"><div class="tl-time">20:00</div><div class="tl-body"><strong class="en">♨️ Jasmac Plaza Tokakyo Onsen (optional)</strong><strong class="ko">♨️ 자스맥 플라자 도카쿄 온천 (Jasmac Plaza Tokakyo Onsen) (선택)</strong><span class="tl-note en">Susukino natural open-air cedar bath · ¥2,750/adult · 5-min walk from restaurant</span><span class="tl-note ko">스스키노 (Susukino) 천연 노천 편백탕 · ¥2,750/성인 · 식당에서 도보 5분</span><span class="tl-warn en">⚠️ Confirm Alex (age 17) admission with parent in advance</span><span class="tl-warn ko">⚠️ 예준 (17세) 보호자 동반 입장 사전 확인 필수</span></div></li>
+          <li class="tl-row"><div class="tl-time">21:30</div><div class="tl-body"><strong class="en">🌃 JR Tower T38 Observatory — NYE Countdown</strong><strong class="ko">🌃 JR 타워 전망대 T38 (JR Tower T38) — 신년 카운트다운</strong><span class="tl-note en">160m above Sapporo · ¥740/person · JR Stn connected · spectacular NYE atmosphere</span><span class="tl-note ko">삿포로 160m 고층 · ¥740/인 · JR역 직결 · 신년 분위기 최고</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── DAY 3 · JAN 1 ── -->
+    <div id="day-d3" class="day-pane">
+      <div class="day-hero">
+        <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=700&q=75" alt="Powder snow forest" loading="lazy">
+        <div class="day-hero-ov">
+          <h2 class="en">Day 3 · Jan 1 — Kokusai Deep Powder + New Year</h2>
+          <h2 class="ko">3일차 · 1/1 — 국제 스키장 (Kokusai) 파우더스노 + 새해</h2>
+          <p class="en">Dad &amp; Alex: Best powder skiing of the trip · Irene: New Year Sapporo city walk &amp; Beer Museum</p>
+          <p class="ko">아빠·예준: 여행 최고 파우더 스키 · 아이린: 새해 삿포로 (Sapporo) 시내 산책 &amp; 맥주박물관</p>
+        </div>
+      </div>
+
+      <div class="alert alert-ok" style="margin-bottom:12px">
+        <span class="en">✅ Kokusai Jan 1: Confirms 09:00–17:00 (New Year normal operation — best powder day)</span>
+        <span class="ko">✅ 국제 스키장 (Kokusai) 1/1: 09:00–17:00 정상 운영 확인 — 최고의 파우더 스노 데이</span>
+      </div>
+
+      <!-- DAD & ALEX -->
+      <div class="card">
+        <div class="ski-track">⛷️ Dad &amp; Alex — Kokusai Deep Powder</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">07:00</div><div class="tl-body"><strong class="en">Hotel breakfast</strong><strong class="ko">호텔 조식</strong></div></li>
+          <li class="tl-row"><div class="tl-time">07:45</div><div class="tl-body"><strong class="en">🚌 Kokusai Direct Bus — Keio Plaza front entrance</strong><strong class="ko">🚌 국제 스키장 (Kokusai) 직통 버스 — 게이오 플라자 (Keio Plaza) 정문 탑승</strong><span class="tl-note en">⚠️ Pre-booking required · Bus pack via Hokkaido Chuo Bus · Alt: 08:45 departure</span><span class="tl-note ko">⚠️ 사전 예약 필수 · 홋카이도 중앙버스 (Hokkaido Chuo Bus) 버스팩 · 대안: 08:45 출발</span></div></li>
+          <li class="tl-row"><div class="tl-time">09:15</div><div class="tl-body"><strong class="en">Arrive Kokusai · Rental center (Base Camp)</strong><strong class="ko">국제 스키장 (Kokusai) 도착 · 렌탈 센터 (Base Camp)</strong><span class="tl-note en">Full set fitting ~20 min (suit, boots, skis, poles, helmet, goggles)</span><span class="tl-note ko">풀세트 핏팅 약 20분 (스키복, 부츠, 스키, 스톡, 헬멧, 고글)</span></div></li>
+          <li class="tl-row"><div class="tl-time">09:40</div><div class="tl-body"><strong class="en">⛷️ Skiing — until 15:30</strong><strong class="ko">⛷️ 스키 활강 — 15:30까지</strong><span class="tl-note en">Kokusai's legendary Japow · 3.6 km family course + advanced off-piste zones · Dad &amp; Alex target fresh lines</span><span class="tl-note ko">국제 스키장 (Kokusai)의 전설적 파우더스노 · 3.6km 패밀리 코스 + 어드밴스 오프-피스트 · 아빠·예준 신선한 라인 공략</span></div></li>
+          <li class="tl-row"><div class="tl-time">12:00</div><div class="tl-body"><strong class="en">🍛 Kokusai Skiers Restaurant — Lunch</strong><strong class="ko">🍛 국제 스키장 (Kokusai) 스키어스 레스토랑 점심</strong><span class="tl-note en">Scallop miso ramen or curry tonkatsu · ¥1,200–1,800 · back on slopes after</span><span class="tl-note ko">가리비 미소 라멘 또는 카레 돈카츠 · ¥1,200–1,800 · 식후 슬로프 복귀</span></div></li>
+          <li class="tl-row"><div class="tl-time">15:30</div><div class="tl-body"><strong class="en">Return equipment → return bus 16:00</strong><strong class="ko">장비 반납 → 귀로 버스 16:00 출발</strong><span class="tl-note en">Hotel arrival ~17:30 · Shower &amp; rest</span><span class="tl-note ko">호텔 도착 약 17:30 · 샤워 &amp; 휴식</span></div></li>
+        </ul>
+      </div>
+
+      <!-- IRENE -->
+      <div class="card">
+        <div class="irene-track">👜 Irene — Sapporo New Year Day 2</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">09:00</div><div class="tl-body"><strong class="en">🍺 Sapporo Beer Museum &amp; Garden (free admission)</strong><strong class="ko">🍺 삿포로 맥주박물관 (Sapporo Beer Museum) &amp; 가든 (무료 입장)</strong><span class="tl-note en">Historic red-brick building · Sapporo beer history · Optional tasting · Subway: Toho Line → Higashi-Kuyakusho Stn</span><span class="tl-note ko">역사적 붉은 벽돌 건물 · 삿포로 맥주 역사 · 선택 시음 · 지하철: 도호선 (Toho Line) → 히가시구야쿠쇼역 (Higashi-Kuyakusho Stn)</span></div></li>
+          <li class="tl-row"><div class="tl-time">11:00</div><div class="tl-body"><strong class="en">☕ Café &amp; New Year stroll — JR Tower Stellar Place</strong><strong class="ko">☕ 카페 &amp; 새해 산책 — JR 타워 스텔라플레이스 (Stellar Place)</strong><span class="tl-note en">Warm indoors · views of snowy Sapporo · 5-min walk from hotel</span><span class="tl-note ko">따뜻한 실내 · 눈 덮인 삿포로 (Sapporo) 전망 · 호텔에서 도보 5분</span></div></li>
+          <li class="tl-row"><div class="tl-time">12:30</div><div class="tl-body"><strong class="en">🍜 Solo Lunch: Ramen Republic (JR Tower 10F)</strong><strong class="ko">🍜 혼자 점심: 라멘 리퍼블릭 (Ramen Republic) (JR 타워 10F)</strong><span class="tl-note en">All of Hokkaido's best ramen brands on one floor · miso / shio / shoyu · ¥1,200–1,500</span><span class="tl-note ko">홋카이도 (Hokkaido) 유명 라멘 브랜드 모음 · 미소/시오/쇼유 · ¥1,200–1,500</span></div></li>
+          <li class="tl-row"><div class="tl-time">14:00</div><div class="tl-body"><strong class="en">🌃 Odori Park &amp; TV Tower — afternoon stroll</strong><strong class="ko">🌃 오도리 공원 (Odori Park) &amp; TV타워 (TV Tower) — 오후 산책</strong><span class="tl-note en">New Year decorations · peaceful midwinter atmosphere · free</span><span class="tl-note ko">새해 장식 · 한겨울 고요한 분위기 · 무료</span></div></li>
+          <li class="tl-row"><div class="tl-time">16:00</div><div class="tl-body"><strong class="en">Return to hotel · wait for Dad &amp; Alex</strong><strong class="ko">호텔 복귀 · 아빠 &amp; 예준 귀환 대기</strong></div></li>
+        </ul>
+      </div>
+
+      <!-- EVENING TOGETHER -->
+      <div class="card">
+        <div class="family-track">🌙 New Year Evening — All Together</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">18:00</div><div class="tl-body"><strong class="en">♨️ Hotel Monterey Edelhof Spa</strong><strong class="ko">♨️ 호텔 몬토레 에델호프 스파 (Hotel Monterey Edelhof Spa)</strong><span class="tl-note en">14F panoramic natural onsen &amp; sauna · 10-min walk or 3-min taxi</span><span class="tl-note ko">14층 파노라마 천연 온천 (Onsen) &amp; 사우나 · 도보 10분 또는 택시 3분</span><span class="tl-warn en">⚠️ Confirm Alex (age 17) entry with parent in advance</span><span class="tl-warn ko">⚠️ 예준 (17세) 보호자 동반 입장 사전 확인 필수</span></div></li>
+          <li class="tl-row"><div class="tl-time">20:00</div><div class="tl-body"><strong class="en">🍜 New Year Dinner (choose one)</strong><strong class="ko">🍜 새해 저녁 (선택)</strong><span class="tl-note en">A: Soup Curry — Suage+ or Garaku (crispy chicken + Hokkaido roasted veg)<br>B: Ramen — Ebisoba Ichigen (shrimp broth) · both near hotel</span><span class="tl-note ko">A안: 스프카레 (Soup Curry) — 스아게+ (Suage+) 또는 가라쿠 (Garaku) (닭다리 + 홋카이도 구운 채소)<br>B안: 라멘 (Ramen) — 에비소바 이치겐 (Ebisoba Ichigen) (새우 육수) · 모두 호텔 근처</span></div></li>
+          <li class="tl-row"><div class="tl-time">22:00</div><div class="tl-body"><strong class="en">Early rest — flight tomorrow at 14:05</strong><strong class="ko">일찍 취침 — 내일 14:05 비행</strong></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── DAY 4 · JAN 2 ── -->
+    <div id="day-d4" class="day-pane">
+      <div class="day-hero">
+        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=700&q=75" alt="Airport departure" loading="lazy">
+        <div class="day-hero-ov">
+          <h2 class="en">Day 4 · Jan 2 — Shopping + KE766 Home</h2>
+          <h2 class="ko">4일차 · 1/2 — 쇼핑 + KE766 귀국</h2>
+          <p class="en">Final shopping at JR Tower · CTS airport · KE766 14:05 → ICN 17:00 · Valet retrieval · Drive home</p>
+          <p class="ko">JR 타워 (JR Tower) 마지막 쇼핑 · 신치토세 공항 (CTS) · KE766 14:05 → 인천 17:00 · 발렛 차량 수령 · 귀가</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="family-track">🌏 All Together — Departure Day</div>
+        <ul class="tl">
+          <li class="tl-row"><div class="tl-time">08:00</div><div class="tl-body"><strong class="en">Hotel breakfast · pack &amp; check-out</strong><strong class="ko">호텔 조식 · 짐 정리 &amp; 체크아웃</strong></div></li>
+          <li class="tl-row"><div class="tl-time">09:30</div><div class="tl-body"><strong class="en">🛍 Final Shopping — JR Tower Esta &amp; Stellar Place</strong><strong class="ko">🛍 마지막 쇼핑 — JR 타워 에스타 (JR Tower Esta) &amp; 스텔라플레이스 (Stellar Place)</strong><span class="tl-note en">Shiroi Koibito · Royce' Raw Chocolate · Rokkatei Butter Sandwich · LeTAO (branch here) · 5-min walk</span><span class="tl-note ko">시로이 코이비토 (Shiroi Koibito) · 로이스 생초콜릿 (Royce') · 롯카테이 버터샌드 (Rokkatei) · 르타오 지점 (LeTAO) · 도보 5분</span></div></li>
+          <li class="tl-row"><div class="tl-time">10:45</div><div class="tl-body"><strong class="en">Head to JR Sapporo Stn</strong><strong class="ko">JR 삿포로역 (Sapporo Stn) 이동</strong></div></li>
+          <li class="tl-row"><div class="tl-time">11:00</div><div class="tl-body"><strong class="en">JR Rapid Airport → New Chitose CTS (37 min)</strong><strong class="ko">JR 쾌속 에어포트 → 신치토세 공항 (CTS) (37분)</strong><span class="tl-note en">B1F platform · ¥1,150/person</span><span class="tl-note ko">B1F 승강장 · ¥1,150/인</span></div></li>
+          <li class="tl-row"><div class="tl-time">11:45</div><div class="tl-body"><strong class="en">Arrive CTS · 3F Ramen Dojo — last ramen</strong><strong class="ko">CTS 도착 · 3F 홋카이도 라멘 도장 (Ramen Dojo) — 마지막 라멘</strong><span class="tl-note en">Hokkaido's best ramen brands · ¥1,000–1,500 · then duty-free shopping</span><span class="tl-note ko">홋카이도 (Hokkaido) 라멘 브랜드 모음 · ¥1,000–1,500 · 이후 면세 쇼핑</span></div></li>
+          <li class="tl-row"><div class="tl-time">12:30</div><div class="tl-body"><strong class="en">Check-in &amp; security · KE766</strong><strong class="ko">탑승수속 &amp; 보안검색 · KE766</strong><span class="tl-note en">Jan 2 is VERY busy — allow ample time</span><span class="tl-note ko">1/2는 매우 혼잡 — 충분한 시간 여유 확보</span></div></li>
+          <li class="tl-row"><div class="tl-time">14:05</div><div class="tl-body"><strong class="en">✈️ KE766 Departs CTS → ICN T2</strong><strong class="ko">✈️ KE766 신치토세 (CTS) 출발 → 인천 T2</strong><span class="tl-note en">~2h 55m · in-flight meal · ETA ICN ~17:00</span><span class="tl-note ko">약 2h 55m · 기내식 · 인천 T2 도착 약 17:00</span></div></li>
+          <li class="tl-row"><div class="tl-time">17:00</div><div class="tl-body"><strong class="en">Arrive ICN T2 · Valet car retrieval</strong><strong class="ko">인천 T2 도착 · 발렛파킹 차량 수령</strong><span class="tl-note en">T2 ground floor → present Samsung Prestige card + voucher → pay parking fee → drive home</span><span class="tl-note ko">T2 정산소 → 삼성 Prestige 카드 + 보관증 제시 → 주차비 정산 (서비스 무료, 주차비 본인 부담) → 귀가</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /itin -->
+
+<!-- ══════════ BOOKING HUB ══════════ -->
+<div id="page-booking" class="page">
+  <div class="wrap">
+    <div class="alert alert-ok" style="margin-bottom:12px">
+      <span class="en">✅ Flights KE765 &amp; KE766 confirmed · ₩2,600,000 paid</span>
+      <span class="ko">✅ 항공편 KE765 &amp; KE766 확정 · ₩2,600,000 결제 완료</span>
+    </div>
+
+    <p class="bk-cat en">🚗 PARKING</p><p class="bk-cat ko">🚗 주차</p>
+    <div class="bk-item">
+      <div class="bk-icon">🚗</div>
+      <div class="bk-body">
+        <div class="bk-name en">ICN T2 Valet Parking — Samsung Corporate Prestige Card</div>
+        <div class="bk-name ko">인천공항 T2 발렛파킹 — 삼성 법인 Prestige 카드</div>
+        <div class="bk-meta en">Dec 30 drop-off · Jan 2 retrieval · Valet service FREE (annual 2× limit) · Parking fee owner's expense · T2 B1 short-term valet lane · Pre-booking mandatory</div>
+        <div class="bk-meta ko">12/30 차량 인도 · 1/2 수령 · 발렛 서비스 무료 (연 2회 한도) · 주차비는 본인 부담 · T2 지하 1층 단기주차장 발렛 차로 · 사전 예약 필수</div>
+        <span class="bk-tag tag-now en">🔴 Book NOW</span><span class="bk-tag tag-now ko">🔴 즉시 예약</span>
+      </div>
+      <a href="https://www.samsungcard.com/corporation/services/event/UHPCBE0115M0.jsp" target="_blank" class="bk-btn">예약 →</a>
+    </div>
+
+    <p class="bk-cat en">✈️ FLIGHTS (CONFIRMED)</p><p class="bk-cat ko">✈️ 항공편 (확정)</p>
+    <div class="bk-item">
+      <div class="bk-icon">✈️</div>
+      <div class="bk-body">
+        <div class="bk-name">Korean Air KE765 · ICN T2 10:05 → CTS 12:45 · Dec 30</div>
+        <div class="bk-meta en">2h 40m nonstop · Meal included · 23kg baggage × 2 ✅ Purchased</div>
+        <div class="bk-meta ko">2h 40m 직항 · 기내식 포함 · 23kg 수하물 × 2 ✅ 구매 완료</div>
+        <span class="bk-tag tag-done">✅ Done</span>
+      </div>
+      <a href="https://www.koreanair.com" target="_blank" class="bk-btn out">Manage →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">✈️</div>
+      <div class="bk-body">
+        <div class="bk-name">Korean Air KE766 · CTS 14:05 → ICN T2 ~17:00 · Jan 2</div>
+        <div class="bk-meta en">~2h 55m nonstop · Meal included · Online check-in 24h before ✅ Purchased</div>
+        <div class="bk-meta ko">약 2h 55m 직항 · 기내식 포함 · 출발 24시간 전 온라인 체크인 ✅ 구매 완료</div>
+        <span class="bk-tag tag-done">✅ Done</span>
+      </div>
+      <a href="https://www.koreanair.com" target="_blank" class="bk-btn out">Manage →</a>
+    </div>
+
+    <p class="bk-cat en">🏨 HOTEL</p><p class="bk-cat ko">🏨 호텔</p>
+    <div class="bk-item">
+      <div class="bk-icon">🏨</div>
+      <div class="bk-body">
+        <div class="bk-name en">Keio Plaza Hotel Sapporo — Standard Triple · 3 nights</div>
+        <div class="bk-name ko">게이오 플라자 호텔 삿포로 (Keio Plaza Hotel Sapporo) — Standard Triple · 3박</div>
+        <div class="bk-meta en">Check-in Dec 30 · Check-out Jan 2 · 31.4m² · 3 single beds · Ski shuttle at front entrance · Pool &amp; sauna</div>
+        <div class="bk-meta ko">체크인 12/30 · 체크아웃 1/2 · 31.4m² · 싱글베드 3개 · 스키 셔틀 정문 · 수영장 &amp; 사우나</div>
+        <span class="bk-tag tag-now en">🔴 Book NOW</span><span class="bk-tag tag-now ko">🔴 즉시 예약</span>
+      </div>
+      <a href="https://www.keioplaza-sapporo.co.jp/english/" target="_blank" class="bk-btn">Book →</a>
+    </div>
+
+    <p class="bk-cat en">🚌 SKI TRANSPORT</p><p class="bk-cat ko">🚌 스키 교통</p>
+    <div class="bk-item">
+      <div class="bk-icon">🚌</div>
+      <div class="bk-body">
+        <div class="bk-name en">Bigruns Bus No.4401 → Teine · Dec 31 (08:35 dep)</div>
+        <div class="bk-name ko">빅런즈 버스 (Bigruns Bus) No.4401 → 테이네 (Teine) · 12/31 (08:35 출발)</div>
+        <div class="bk-meta en">Meet 08:25 Keio Plaza lobby · Return: Highland 16:00 → Hotel 17:10 · Dad + Alex only (2 persons)</div>
+        <div class="bk-meta ko">08:25 게이오 플라자 (Keio Plaza) 로비 집합 · 귀로: 하이랜드 (Highland) 16:00 → 호텔 17:10 · 아빠+예준 2인</div>
+        <span class="bk-tag tag-oct en">🟡 By mid-Oct</span><span class="bk-tag tag-oct ko">🟡 10월 중순까지</span>
+      </div>
+      <a href="https://bigruns.com/" target="_blank" class="bk-btn">Book →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">🚌</div>
+      <div class="bk-body">
+        <div class="bk-name en">Kokusai Direct Bus Pack · Jan 1 (07:45 or 08:45 dep)</div>
+        <div class="bk-name ko">국제 스키장 (Kokusai) 직통 버스팩 · 1/1 (07:45 또는 08:45 출발)</div>
+        <div class="bk-meta en">Departs Keio Plaza front entrance · Returns 15:30 or 16:30 · Dad + Alex only (2 persons) · via Hokkaido Chuo Bus</div>
+        <div class="bk-meta ko">게이오 플라자 (Keio Plaza) 정문 출발 · 귀로 15:30 또는 16:30 · 아빠+예준 2인 · 홋카이도 중앙버스 (Hokkaido Chuo Bus)</div>
+        <span class="bk-tag tag-oct en">🟡 By mid-Oct</span><span class="bk-tag tag-oct ko">🟡 10월 중순까지</span>
+      </div>
+      <a href="https://teikan.chuo-bus.co.jp/en/course/12403" target="_blank" class="bk-btn">Book →</a>
+    </div>
+
+    <p class="bk-cat en">🍽️ DINING (Reservation Required)</p><p class="bk-cat ko">🍽️ 식당 (예약 필수)</p>
+    <div class="bk-item">
+      <div class="bk-icon">🦀</div>
+      <div class="bk-body">
+        <div class="bk-name en">Hyosetsu no Mon — Crab Dinner · Dec 31 evening</div>
+        <div class="bk-name ko">효세츠노몬 (Hyosetsu no Mon) — 게 요리 저녁 · 12/31</div>
+        <div class="bk-meta en">Est. 1964 · King crab sashimi + hairy crab shabu-shabu · ¥10,000+/person · 3 persons · Sells out October</div>
+        <div class="bk-meta ko">1964년 창업 · 대게 사시미 + 털게 샤브샤브 · ¥10,000+/인 · 3인 · 10월 마감</div>
+        <span class="bk-tag tag-oct en">🟡 By mid-Oct</span><span class="bk-tag tag-oct ko">🟡 10월 중순까지</span>
+      </div>
+      <a href="https://www.hyousetsu.co.jp/" target="_blank" class="bk-btn">Book →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">🦀</div>
+      <div class="bk-body">
+        <div class="bk-name en">Sapporo Kani Honke — Crab Dinner (alternative) · Dec 31</div>
+        <div class="bk-name ko">삿포로 가니혼케 (Sapporo Kani Honke) — 게 요리 저녁 (대안) · 12/31</div>
+        <div class="bk-meta en">Near Sapporo Stn · Traditional Japanese setting · ¥8,000+/person</div>
+        <div class="bk-meta ko">삿포로역 (Sapporo Stn) 인근 · 일본 전통 분위기 · ¥8,000+/인</div>
+        <span class="bk-tag tag-oct en">🟡 By mid-Oct</span><span class="bk-tag tag-oct ko">🟡 10월 중순까지</span>
+      </div>
+      <a href="https://www.kani-honke.co.jp/en/" target="_blank" class="bk-btn">Book →</a>
+    </div>
+
+    <p class="bk-cat en">♨️ ONSEN (Confirm age-17 admission first)</p><p class="bk-cat ko">♨️ 온천 (Onsen) — 17세 입장 먼저 확인</p>
+    <div class="bk-item">
+      <div class="bk-icon">♨️</div>
+      <div class="bk-body">
+        <div class="bk-name en">Jasmac Plaza Tokakyo Onsen · Dec 31 after crab dinner</div>
+        <div class="bk-name ko">자스맥 플라자 도카쿄 온천 (Jasmac Plaza Tokakyo Onsen) · 12/31 게 요리 후</div>
+        <div class="bk-meta en">Susukino · Natural open-air cedar bath · ¥2,750/adult · 11:00–24:00 · Walk-in OK</div>
+        <div class="bk-meta ko">스스키노 (Susukino) · 천연 노천 편백탕 · ¥2,750/성인 · 11:00–24:00 · 워크인 가능</div>
+      </div>
+      <a href="https://www.jasmacplaza.jp/hotspring/" target="_blank" class="bk-btn out">Info →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">♨️</div>
+      <div class="bk-body">
+        <div class="bk-name en">Hotel Monterey Edelhof Spa · Jan 1 evening</div>
+        <div class="bk-name ko">호텔 몬토레 에델호프 스파 (Hotel Monterey Edelhof Spa) · 1/1 저녁</div>
+        <div class="bk-meta en">14F panoramic natural onsen &amp; sauna · city skyline · Walk-in OK</div>
+        <div class="bk-meta ko">14층 파노라마 천연 온천 (Onsen) &amp; 사우나 · 도심 야경 · 워크인 가능</div>
+      </div>
+      <a href="https://www.hotelmonterey.co.jp/en/edelhof/spa/" target="_blank" class="bk-btn out">Info →</a>
+    </div>
+
+    <p class="bk-cat en">📋 ESSENTIALS</p><p class="bk-cat ko">📋 필수 사항</p>
+    <div class="bk-item">
+      <div class="bk-icon">🌐</div>
+      <div class="bk-body">
+        <div class="bk-name en">Visit Japan Web — Immigration QR (all 3 members)</div>
+        <div class="bk-name ko">Visit Japan Web — 입국 QR코드 (3인 모두 등록)</div>
+        <div class="bk-meta en">Register before departure · Required for fast-track immigration</div>
+        <div class="bk-meta ko">출발 전 등록 · 입국 심사 패스트트랙 필수</div>
+        <span class="bk-tag tag-nov en">🟢 Before Nov</span><span class="bk-tag tag-nov ko">🟢 11월 전</span>
+      </div>
+      <a href="https://vjw-lp.digital.go.jp/en/" target="_blank" class="bk-btn">Register →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">📱</div>
+      <div class="bk-body">
+        <div class="bk-name en">Japan eSIM or Pocket Wi-Fi · 3 persons</div>
+        <div class="bk-name ko">일본 eSIM 또는 포켓 와이파이 (Pocket Wi-Fi) · 3인</div>
+        <div class="bk-meta en">Unlimited data · order 1–2 weeks before departure</div>
+        <div class="bk-meta ko">무제한 데이터 · 출발 1–2주 전 구매</div>
+        <span class="bk-tag tag-nov en">🟢 2 weeks before</span><span class="bk-tag tag-nov ko">🟢 2주 전</span>
+      </div>
+      <a href="https://www.klook.com/en-US/activity/74264-japan-esim/" target="_blank" class="bk-btn out">Options →</a>
+    </div>
+    <div class="bk-item">
+      <div class="bk-icon">🛡️</div>
+      <div class="bk-body">
+        <div class="bk-name en">Travel Insurance · 3 persons · ski accident coverage</div>
+        <div class="bk-name ko">해외여행자보험 · 3인 · 스키 사고 특약 포함</div>
+        <div class="bk-meta en">Must include ski coverage · purchase after flights confirmed</div>
+        <div class="bk-meta ko">스키 특약 필수 · 항공권 확정 후 가입</div>
+        <span class="bk-tag tag-nov en">🟢 After flights</span><span class="bk-tag tag-nov ko">🟢 항공 확정 후</span>
+      </div>
+      <a href="https://www.db-ins.com/traveler/" target="_blank" class="bk-btn out">Quote →</a>
+    </div>
+  </div>
+</div><!-- /booking -->
+
+<!-- ══════════ CHECKLIST ══════════ -->
+<div id="page-check" class="page">
+  <div class="wrap">
+    <div class="person-tabs">
+      <button class="person-tab active" onclick="showPerson('bk',this)"><span class="en">🔗 Booking</span><span class="ko">🔗 예약 상황</span></button>
+      <button class="person-tab" onclick="showPerson('dad',this)"><span class="en">👨 Dad</span><span class="ko">👨 아빠</span></button>
+      <button class="person-tab" onclick="showPerson('mom',this)"><span class="en">👩 Mom (Irene)</span><span class="ko">👩 엄마 (아이린)</span></button>
+      <button class="person-tab" onclick="showPerson('alex',this)"><span class="en">🧑 Alex</span><span class="ko">🧑 예준</span></button>
+    </div>
+
+    <!-- BOOKING STATUS -->
+    <div id="p-bk" class="p-pane active"><div class="card">
+      <p class="chk-sec en">🔴 Urgent Now</p><p class="chk-sec ko">🔴 즉시</p>
+      <ul class="chk-list" id="list-bk-now"></ul>
+      <p class="chk-sec en" style="margin-top:13px">🟡 By Mid-October</p><p class="chk-sec ko" style="margin-top:13px">🟡 10월 중순까지</p>
+      <ul class="chk-list" id="list-bk-oct"></ul>
+      <p class="chk-sec en" style="margin-top:13px">🟢 November &amp; Pre-Departure</p><p class="chk-sec ko" style="margin-top:13px">🟢 11월 ~ 출발 전</p>
+      <ul class="chk-list" id="list-bk-nov"></ul>
+      <p class="chk-sec en" style="margin-top:13px">➕ Add Booking Item</p><p class="chk-sec ko" style="margin-top:13px">➕ 예약 항목 추가</p>
+      <div class="add-row"><input id="bk-inp" type="text" placeholder="Add…" onkeydown="if(event.key==='Enter')addC('bk')"><button class="add-btn" onclick="addC('bk')">+</button></div>
+      <ul class="chk-list" id="list-bk-c" style="margin-top:7px"></ul>
+    </div></div>
+
+    <!-- DAD -->
+    <div id="p-dad" class="p-pane"><div class="card">
+      <p class="chk-sec en">📋 Dad's Packing</p><p class="chk-sec ko">📋 아빠 준비물</p>
+      <ul class="chk-list" id="list-dad"></ul>
+      <div class="add-row"><input id="dad-inp" type="text" placeholder="Add item…" onkeydown="if(event.key==='Enter')addC('dad')"><button class="add-btn" onclick="addC('dad')">+</button></div>
+      <ul class="chk-list" id="list-dad-c" style="margin-top:7px"></ul>
+    </div></div>
+
+    <!-- MOM -->
+    <div id="p-mom" class="p-pane"><div class="card">
+      <p class="chk-sec en">📋 Irene's Packing</p><p class="chk-sec ko">📋 아이린 준비물</p>
+      <ul class="chk-list" id="list-mom"></ul>
+      <div class="add-row"><input id="mom-inp" type="text" placeholder="Add item…" onkeydown="if(event.key==='Enter')addC('mom')"><button class="add-btn" onclick="addC('mom')">+</button></div>
+      <ul class="chk-list" id="list-mom-c" style="margin-top:7px"></ul>
+    </div></div>
+
+    <!-- ALEX -->
+    <div id="p-alex" class="p-pane"><div class="card">
+      <p class="chk-sec en">📋 Alex's Packing</p><p class="chk-sec ko">📋 예준 준비물</p>
+      <ul class="chk-list" id="list-alex"></ul>
+      <div class="add-row"><input id="alex-inp" type="text" placeholder="Add item…" onkeydown="if(event.key==='Enter')addC('alex')"><button class="add-btn" onclick="addC('alex')">+</button></div>
+      <ul class="chk-list" id="list-alex-c" style="margin-top:7px"></ul>
+    </div></div>
+  </div>
+</div><!-- /check -->
+
+<!-- ══════════ BUDGET ══════════ -->
+<div id="page-budget" class="page">
+  <div class="wrap">
+
+    <!-- CONVERTER -->
+    <div class="conv-box">
+      <div class="conv-title en">💱 Currency Converter · KRW ⇄ JPY — Live Rate</div>
+      <div class="conv-title ko">💱 환율 계산기 · 원화 ⇄ 엔화 — 실시간 환율</div>
+      <div class="conv-row"><span class="conv-sym">₩</span><input class="conv-inp" id="krw-inp" type="number" placeholder="Korean Won" inputmode="decimal" oninput="cvKrw()"></div>
+      <div class="conv-row"><span class="conv-sym">¥</span><input class="conv-inp" id="jpy-inp" type="number" placeholder="Japanese Yen" inputmode="decimal" oninput="cvJpy()"></div>
+      <div class="rate-row">
+        <label class="en">¥1 =</label><label class="ko">¥1 =</label>
+        <input id="rate-inp" type="number" value="9.40" step="0.01" oninput="onRateChange()">
+        <label>₩</label>
+        <span class="live-badge" id="live-badge">loading…</span>
+        <button class="conv-swap" onclick="swapConv()">⇄ Swap</button>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="bud-summary">
+      <div class="bud-box"><span class="bud-val" id="b-est-tot">–</span><div class="bud-lbl en">Total Estimated</div><div class="bud-lbl ko">총 예상 비용</div></div>
+      <div class="bud-box"><span class="bud-val" id="b-act-tot">–</span><div class="bud-lbl en">Total Actual (₩)</div><div class="bud-lbl ko">실제 지출 합계 (₩)</div></div>
+    </div>
+
+    <!-- BUDGET TABLE -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="bud-scroll"><table class="bud-table" id="btable">
+        <thead><tr>
+          <th class="en">Item</th><th class="ko">항목</th>
+          <th class="en">Est. ₩</th><th class="ko">예상 ₩</th>
+          <th class="en">Actual</th><th class="ko">실제</th>
+          <th class="en">₩ equiv.</th><th class="ko">₩ 환산</th>
+          <th class="en">Diff</th><th class="ko">차이</th>
+        </tr></thead>
+        <tbody id="btbody"></tbody>
+      </table></div>
+    </div>
+
+    <!-- ADD EXTRA -->
+    <div class="card">
+      <div class="card-title">➕ <span class="en">Add Unplanned Expense</span><span class="ko">예상외 추가 비용</span></div>
+      <div class="extra-row">
+        <input id="ex-name" type="text" placeholder="Item / 항목">
+        <input id="ex-est"  type="number" placeholder="Est ₩" inputmode="numeric" style="max-width:100px">
+        <button class="add-btn" onclick="addExtra()"><span class="en">Add</span><span class="ko">추가</span></button>
+      </div>
+    </div>
+
+    <p style="font-size:0.71rem;color:var(--muted)" class="en">Enter actual amounts in ¥ or ₩ — auto-converts using live rate. All data saved locally on your device.</p>
+    <p style="font-size:0.71rem;color:var(--muted)" class="ko">실제 금액을 ¥ 또는 ₩로 입력하면 실시간 환율로 자동 변환됩니다. 데이터는 기기에 저장됩니다.</p>
+  </div>
+</div><!-- /budget -->
+
+<!-- ══════════ JAVASCRIPT ══════════ -->
+<script>
+/* ── NAV ── */
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');window.scrollTo(0,0);
+}
+function showDay(id,btn){
+  document.querySelectorAll('.day-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.itin-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('day-'+id).classList.add('active');btn.classList.add('active');
+}
+function showPerson(id,btn){
+  document.querySelectorAll('.p-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.person-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');btn.classList.add('active');
+}
+
+/* ── LANG — default EN, persist choice ── */
+function setLang(l,btn){
+  document.body.className='lang-'+l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  try{localStorage.setItem('sp_lang',l);}catch(e){}
+}
+(function(){
+  var saved;
+  try{saved=localStorage.getItem('sp_lang');}catch(e){}
+  var l=saved||'en'; /* always default to English */
+  document.body.className='lang-'+l;
+  document.getElementById(l==='en'?'btn-en':'btn-ko').classList.add('active');
+  document.getElementById(l==='en'?'btn-ko':'btn-en').classList.remove('active');
+})();
+
+/* ── D-DAY ── */
+(function(){
+  var dep=new Date('2026-12-30T10:05:00+09:00');
+  var now=new Date();
+  var diff=Math.ceil((dep-now)/86400000);
+  var el=document.getElementById('dd-n');
+  if(el)el.textContent=diff>0?'D-'+diff:diff===0?'✈️':'🎉';
+})();
+
+/* ── LIVE WEATHER ── */
+async function loadWx(){
+  var w=document.getElementById('wx-widget');if(!w)return;
+  try{
+    var r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.0618&longitude=141.3545&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&forecast_days=4');
+    var d=await r.json();
+    var C=d.daily.weathercode,H=d.daily.temperature_2m_max,L=d.daily.temperature_2m_min,T=d.daily.time;
+    var icon=c=>{if(c===0)return'☀️';if(c<=2)return'⛅';if(c===3)return'☁️';if(c<=49)return'🌫️';if(c<=59)return'🌧️';if(c<=79)return'❄️';if(c<=84)return'🌨️';return'⛈️';};
+    var desc=c=>{if(c===0)return'Clear';if(c<=2)return'Partly cloudy';if(c===3)return'Overcast';if(c<=49)return'Fog';if(c<=59)return'Rain';if(c<=79)return'Snow';if(c<=84)return'Snow showers';return'Storm';};
+    var dy=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var h='<div class="wx-grid">';
+    for(var i=0;i<4;i++){var dt=new Date(T[i]);h+=`<div class="wx-tile"><div class="wx-date">${dy[dt.getDay()]} ${dt.getMonth()+1}/${dt.getDate()}</div><span class="wx-icon">${icon(C[i])}</span><div class="wx-desc">${desc(C[i])}</div><div class="wx-temps">${Math.round(H[i])}°/${Math.round(L[i])}°</div></div>`;}
+    h+='</div><div class="wx-credit">Source: Open-Meteo · Sapporo 43.06°N,141.35°E · refreshes every 10 min</div>';
+    w.innerHTML=h;
+  }catch(e){w.innerHTML='<div class="wx-loading">Weather unavailable — check connection</div>';}
+}
+loadWx();setInterval(loadWx,600000);
+
+/* ── CURRENCY ── */
+var RATE=parseFloat((function(){try{return localStorage.getItem('sp_rate');}catch(e){return null;}}())||'9.40');
+document.getElementById('rate-inp').value=RATE.toFixed(2);
+
+async function fetchRate(){
+  try{
+    var r=await fetch('https://open.er-api.com/v6/latest/JPY');
+    var d=await r.json();
+    if(d.rates&&d.rates.KRW){
+      RATE=d.rates.KRW;
+      document.getElementById('rate-inp').value=RATE.toFixed(2);
+      try{localStorage.setItem('sp_rate',RATE);}catch(e){}
+      var lb=document.getElementById('live-badge');
+      if(lb){lb.textContent='Live ✓';lb.style.background='rgba(16,185,129,.3)';}
+      renderBudget();
+    }
+  }catch(e){var lb=document.getElementById('live-badge');if(lb)lb.textContent='offline';}
+}
+fetchRate();
+
+function onRateChange(){RATE=parseFloat(document.getElementById('rate-inp').value)||9.4;try{localStorage.setItem('sp_rate',RATE);}catch(e){}cvKrw();renderBudget();}
+function cvKrw(){var k=parseFloat(document.getElementById('krw-inp').value);document.getElementById('jpy-inp').value=k?Math.round(k/RATE):'';}
+function cvJpy(){var j=parseFloat(document.getElementById('jpy-inp').value);document.getElementById('krw-inp').value=j?Math.round(j*RATE):'';}
+function swapConv(){var k=document.getElementById('krw-inp').value,j=document.getElementById('jpy-inp').value;document.getElementById('krw-inp').value=j?Math.round(parseFloat(j)*RATE):'';document.getElementById('jpy-inp').value=k?Math.round(parseFloat(k)/RATE):'';}
+
+/* ── BUDGET DATA ── */
+/* Flights already paid: ₩2,600,000 */
+var BROWS=[
+  {cat:'✈️ Flights',id:'flight',en:'Korean Air KE765 + KE766 (3 persons) — PAID',ko:'대한항공 (Korean Air) KE765+KE766 (3인) — 완납',est:2600000,paid:true},
+  {cat:'🚗 Transport',id:'valet',en:'ICN T2 Valet Parking — service free, parking fee',ko:'인천 T2 발렛파킹 — 서비스 무료, 주차비 부담',est:55000},
+  {cat:'🚗 Transport',id:'jr1',en:'JR Rapid Airport CTS↔Sapporo ×3 round-trip',ko:'JR 쾌속 에어포트 왕복 ×3인',est:69000},
+  {cat:'🚗 Transport',id:'bus_teine',en:'Bigruns Bus ×2 (Dad+Alex) round-trip Dec 31',ko:'빅런즈 (Bigruns) 버스 ×2인 왕복 (12/31)',est:40000},
+  {cat:'🚗 Transport',id:'bus_koku',en:'Kokusai Bus ×2 (Dad+Alex) round-trip Jan 1',ko:'국제 스키장 (Kokusai) 버스 ×2인 왕복 (1/1)',est:40000},
+  {cat:'🚗 Transport',id:'taxi',en:'City taxis & subway (onsen, shopping, NYE)',ko:'시내 택시 & 지하철 (온천, 쇼핑, 제야)',est:50000},
+  {cat:'🏨 Hotel',id:'hotel',en:'Keio Plaza Standard Triple · 3 nights (breakfast)',ko:'게이오 플라자 (Keio Plaza) Standard Triple · 3박 (조식)',est:1225000},
+  {cat:'🎿 Ski — Teine (Dec 31)',id:'lift_teine',en:'Teine lift pass ×2 (Dad+Alex)',ko:'테이네 (Teine) 리프트권 ×2인',est:113000},
+  {cat:'🎿 Ski — Teine (Dec 31)',id:'rent_teine',en:'Teine full rental set ×2',ko:'테이네 (Teine) 풀 렌탈 세트 ×2인',est:95000},
+  {cat:'🎿 Ski — Teine (Dec 31)',id:'lunch_teine',en:'Teine ski lunch ×2',ko:'테이네 (Teine) 스키장 점심 ×2인',est:36000},
+  {cat:'🎿 Ski — Kokusai (Jan 1)',id:'lift_koku',en:'Kokusai lift pass ×2 (Dad+Alex)',ko:'국제 스키장 (Kokusai) 리프트권 ×2인',est:113000},
+  {cat:'🎿 Ski — Kokusai (Jan 1)',id:'rent_koku',en:'Kokusai full rental set ×2',ko:'국제 스키장 (Kokusai) 풀 렌탈 세트 ×2인',est:95000},
+  {cat:'🎿 Ski — Kokusai (Jan 1)',id:'lunch_koku',en:'Kokusai ski lunch ×2',ko:'국제 스키장 (Kokusai) 스키장 점심 ×2인',est:36000},
+  {cat:'🍽️ Dining',id:'d_sushi',en:'Nemuro Hanamaru sushi ×3 (Dec 30)',ko:'네무로 하나마루 (Nemuro Hanamaru) 스시 ×3인 (12/30)',est:150000},
+  {cat:'🍽️ Dining',id:'d_crab',en:'Crab course dinner ×3 (Dec 31)',ko:'게 코스 요리 ×3인 (12/31)',est:375000},
+  {cat:'🍽️ Dining',id:'d_irene1',en:'Irene solo lunch Day 2 (Dec 31)',ko:'아이린 혼자 점심 Day 2 (12/31)',est:27000},
+  {cat:'🍽️ Dining',id:'d_irene2',en:'Irene solo lunch Day 3 (Jan 1)',ko:'아이린 혼자 점심 Day 3 (1/1)',est:13000},
+  {cat:'🍽️ Dining',id:'d_nye',en:'NYE dinner ×3 (Dec 31)',ko:'제야의 만찬 ×3인 (12/31)',est:54000},
+  {cat:'🍽️ Dining',id:'d_jan1',en:'Jan 1 evening dinner ×3',ko:'1/1 저녁 ×3인',est:54000},
+  {cat:'🍽️ Dining',id:'d_jan2',en:'Jan 2 airport ramen + snacks ×3',ko:'1/2 공항 라멘 + 간식 ×3인',est:45000},
+  {cat:'🍽️ Dining',id:'d_misc',en:'Misc meals, cafés, convenience stores',ko:'기타 식사, 카페, 편의점',est:60000},
+  {cat:'♨️ Onsen',id:'on_jasmac',en:'Jasmac Tokakyo ×3 (Dec 31)',ko:'자스맥 도카쿄 (Jasmac Tokakyo) ×3인 (12/31)',est:82500},
+  {cat:'♨️ Onsen',id:'on_monterey',en:'Hotel Monterey Edelhof ×3 (Jan 1)',ko:'몬토레 에델호프 (Monterey Edelhof) ×3인 (1/1)',est:90000},
+  {cat:'🎡 Activities',id:'act_t38',en:'JR Tower T38 Observatory ×3 (Dec 31 NYE)',ko:'JR 타워 T38 (JR Tower T38) ×3인 (12/31)',est:21000},
+  {cat:'🎡 Activities',id:'act_museum',en:'Hokkaido Museum of Modern Art ×1 (Irene)',ko:'홋카이도 근대미술관 (Irene) ×1인',est:5000},
+  {cat:'🛍 Shopping',id:'shop',en:'Duty-free + Sapporo souvenirs',ko:'면세 + 삿포로 기념품',est:200000},
+  {cat:'🛡 Other',id:'ins',en:'Travel insurance ×3 (ski coverage)',ko:'여행자보험 ×3인 (스키 특약)',est:165000},
+  {cat:'🛡 Other',id:'esim',en:'Japan eSIM ×3',ko:'일본 eSIM ×3인',est:45000},
+  {cat:'🛡 Other',id:'contingency',en:'Contingency / misc',ko:'예비비 / 기타',est:150000},
+];
+
+function fmtN(n){return n?n.toLocaleString('ko-KR'):'-';}
+
+function renderBudget(){
+  var tbody=document.getElementById('btbody');if(!tbody)return;
+  var cats=[...new Set(BROWS.map(r=>r.cat))];
+  var html='';var totEst=0,totActKrw=0;
+  cats.forEach(cat=>{
+    html+=`<tr class="cat-hdr"><td colspan="10">${cat}</td></tr>`;
+    BROWS.filter(r=>r.cat===cat).forEach(row=>{
+      var saved=ls('act_'+row.id)||'';
+      var isJpy=ls('act_'+row.id+'_jpy')==='1';
+      var actKrw=0;if(saved){actKrw=isJpy?Math.round(parseFloat(saved)*RATE):parseInt(saved);}
+      var diff=saved?actKrw-row.est:null;
+      var dc=diff===null?'diff-zero':diff<0?'diff-pos':'diff-neg';
+      var dt=diff===null?'–':diff<0?'▼'+fmtN(Math.abs(diff)):'▲'+fmtN(diff);
+      totEst+=row.est;if(saved)totActKrw+=actKrw;
+      var paidMark=row.paid?'<span style="color:var(--green);font-weight:700;font-size:0.7rem">✅ paid</span>':'';
+      html+=`<tr>
+        <td class="en">${row.en} ${paidMark}</td><td class="ko">${row.ko} ${paidMark}</td>
+        <td class="en">${fmtN(row.est)}</td><td class="ko">${fmtN(row.est)}</td>
+        <td>
+          <input class="act-inp" type="number" value="${saved}" placeholder="¥ or ₩"
+            onchange="saveAct('${row.id}',this.value)">
+          <select class="cur-sel" onchange="saveCur('${row.id}',this.value)">
+            <option value="jpy" ${isJpy?'selected':''}>¥ JPY</option>
+            <option value="krw" ${!isJpy?'selected':''}>₩ KRW</option>
+          </select>
+        </td>
+        <td class="ko"><input class="act-inp" type="number" value="${saved}" placeholder="¥ or ₩" onchange="saveAct('${row.id}',this.value)"></td>
+        <td>${saved?fmtN(actKrw):'–'}</td><td class="ko">${saved?fmtN(actKrw):'–'}</td>
+        <td class="${dc} en">${dt}</td><td class="${dc} ko">${dt}</td>
+      </tr>`;
+    });
+  });
+  /* extras */
+  var extras=JSON.parse(ls('sp_extras')||'[]');
+  if(extras.length){
+    html+=`<tr class="cat-hdr"><td colspan="10">➕ Extra / Unplanned</td></tr>`;
+    extras.forEach(ex=>{
+      var saved=ls('act_ex_'+ex.id)||'';
+      var isJpy=ls('act_ex_'+ex.id+'_jpy')==='1';
+      var actKrw=saved?(isJpy?Math.round(parseFloat(saved)*RATE):parseInt(saved)):0;
+      var diff=saved?actKrw-(ex.est||0):null;
+      var dc=diff===null?'diff-zero':diff<0?'diff-pos':'diff-neg';
+      var dt=diff===null?'–':diff<0?'▼'+fmtN(Math.abs(diff)):'▲'+fmtN(diff);
+      totEst+=(ex.est||0);if(saved)totActKrw+=actKrw;
+      html+=`<tr>
+        <td colspan="2">${ex.name} <button onclick="delExtra('${ex.id}')" style="border:none;background:none;color:var(--muted);cursor:pointer">✕</button></td>
+        <td>${fmtN(ex.est||0)}</td><td class="ko">${fmtN(ex.est||0)}</td>
+        <td><input class="act-inp" type="number" value="${saved}" placeholder="¥ or ₩" onchange="saveActEx('${ex.id}',this.value)">
+          <select class="cur-sel" onchange="saveCurEx('${ex.id}',this.value)">
+            <option value="jpy" ${isJpy?'selected':''}>¥</option>
+            <option value="krw" ${!isJpy?'selected':''}>₩</option>
+          </select>
+        </td>
+        <td></td>
+        <td>${saved?fmtN(actKrw):'–'}</td><td class="ko">${saved?fmtN(actKrw):'–'}</td>
+        <td class="${dc}">${dt}</td><td class="ko ${dc}">${dt}</td>
+      </tr>`;
+    });
+  }
+  /* grand total */
+  var td=totActKrw-totEst,tdc=totActKrw===0?'diff-zero':td<0?'diff-pos':'diff-neg',tdt=totActKrw===0?'–':td<0?'▼'+fmtN(Math.abs(td)):'▲'+fmtN(td);
+  html+=`<tr class="grand">
+    <td class="en" colspan="2"><strong>Grand Total (3 persons)</strong></td><td class="ko" colspan="2"><strong>총합계 (3인)</strong></td>
+    <td><strong>${fmtN(totEst)}</strong></td><td class="ko"><strong>${fmtN(totEst)}</strong></td>
+    <td><strong>${totActKrw?fmtN(totActKrw):'–'}</strong></td><td class="ko"><strong>${totActKrw?fmtN(totActKrw):'–'}</strong></td>
+    <td class="${tdc}"><strong>${tdt}</strong></td><td class="ko ${tdc}"><strong>${tdt}</strong></td>
+  </tr>`;
+  tbody.innerHTML=html;
+  var be=document.getElementById('b-est-tot'),ba=document.getElementById('b-act-tot');
+  if(be)be.textContent='₩'+fmtN(totEst);
+  if(ba)ba.textContent=totActKrw?'₩'+fmtN(totActKrw):'–';
+}
+function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lss(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function saveAct(id,v){if(v)lss('act_'+id,v);else{try{localStorage.removeItem('act_'+id);}catch(e){}}renderBudget();}
+function saveCur(id,v){lss('act_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
+function saveActEx(id,v){if(v)lss('act_ex_'+id,v);else{try{localStorage.removeItem('act_ex_'+id);}catch(e){}}renderBudget();}
+function saveCurEx(id,v){lss('act_ex_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
+function addExtra(){
+  var nm=document.getElementById('ex-name').value.trim();
+  var est=parseInt(document.getElementById('ex-est').value)||0;
+  if(!nm)return;
+  var extras=JSON.parse(ls('sp_extras')||'[]');
+  var id='ex'+Date.now();extras.push({id,name:nm,est});
+  lss('sp_extras',JSON.stringify(extras));
+  document.getElementById('ex-name').value='';document.getElementById('ex-est').value='';
+  renderBudget();
+}
+function delExtra(id){
+  var extras=JSON.parse(ls('sp_extras')||'[]');
+  lss('sp_extras',JSON.stringify(extras.filter(e=>e.id!==id)));
+  try{localStorage.removeItem('act_ex_'+id);localStorage.removeItem('act_ex_'+id+'_jpy');}catch(e){}
+  renderBudget();
+}
+renderBudget();
+
+/* ── CHECKLIST DATA ── */
+var BK_NOW=[
+  {id:'bn1',en:'Samsung Prestige card — ICN T2 valet parking pre-book (Dec 30 drop-off)',ko:'삼성 Prestige 카드 — 인천 T2 발렛파킹 사전 예약 (12/30 차량 인도)'},
+  {id:'bn2',en:'Keio Plaza Hotel — Standard Triple 3 nights (Dec 30 check-in, Jan 2 check-out)',ko:'게이오 플라자 (Keio Plaza) — Standard Triple 3박 (12/30 체크인, 1/2 체크아웃)'},
+];
+var BK_OCT=[
+  {id:'bo1',en:'Hyosetsu no Mon (or Kani Honke) crab dinner — Dec 31 evening, 3 persons',ko:'효세츠노몬 (Hyosetsu no Mon) (또는 가니혼케 (Kani Honke)) 게 요리 저녁 — 12/31, 3인'},
+  {id:'bo2',en:'Bigruns Bus No.4401 — Teine Dec 31 (08:35 dep), Dad + Alex × 2',ko:'빅런즈 버스 (Bigruns Bus) No.4401 — 테이네 (Teine) 12/31 (08:35 출발), 아빠+예준 ×2인'},
+  {id:'bo3',en:'Kokusai Direct Bus Pack — Jan 1 (07:45 or 08:45 dep), Dad + Alex × 2',ko:'국제 스키장 (Kokusai) 직통 버스팩 — 1/1 (07:45 또는 08:45 출발), 아빠+예준 ×2인'},
+  {id:'bo4',en:'Email Jasmac Tokakyo onsen — confirm Alex (age 17) entry with parent',ko:'자스맥 도카쿄 온천 (Jasmac Tokakyo Onsen) 이메일 — 예준 (17세) 보호자 동반 입장 확인'},
+  {id:'bo5',en:'Email Monterey Edelhof spa — confirm Alex (age 17) entry with parent',ko:'몬토레 에델호프 스파 (Monterey Edelhof Spa) 이메일 — 예준 (17세) 보호자 동반 입장 확인'},
+];
+var BK_NOV=[
+  {id:'bv1',en:'Travel insurance × 3 persons (ski accident coverage required)',ko:'여행자보험 × 3인 (스키 사고 특약 포함 필수)'},
+  {id:'bv2',en:'Japan eSIM × 3 (order 1–2 weeks before departure)',ko:'일본 eSIM × 3인 (출발 1–2주 전 구매)'},
+  {id:'bv3',en:'Visit Japan Web — register all 3 members (immigration QR)',ko:'Visit Japan Web — 3인 모두 등록 (입국 QR코드)'},
+  {id:'bv4',en:'Korean Air app — online check-in (24h before departure)',ko:'대한항공 (Korean Air) 앱 — 온라인 체크인 (출발 24시간 전)'},
+  {id:'bv5',en:'Check passport validity — 6+ months from Jan 2, 2027 for all 3',ko:'여권 유효기간 확인 — 2027년 1/2 기준 6개월 이상 (3인 모두)'},
+];
+var DAD=[
+  {id:'d1',en:'Passport',ko:'여권'},
+  {id:'d2',en:'Samsung Prestige card (valet parking)',ko:'삼성 Prestige 카드 (발렛파킹)'},
+  {id:'d3',en:'Korean Air booking confirmation',ko:'대한항공 (Korean Air) 예약 확인서'},
+  {id:'d4',en:'Thermal base layer × 2 (top & bottom)',ko:'내복 (상하) × 2'},
+  {id:'d5',en:'Ski socks × 3 pairs',ko:'스키 양말 × 3켤레'},
+  {id:'d6',en:'Waterproof ski gloves',ko:'방수 스키 장갑'},
+  {id:'d7',en:'Neck warmer / balaclava',ko:'넥워머 / 발라클라바'},
+  {id:'d8',en:'Sunscreen SPF 50+ (slope glare)',ko:'선크림 SPF 50+ (슬로프 자외선)'},
+  {id:'d9',en:'Pain reliever / muscle patch',ko:'진통제 / 파스'},
+  {id:'d10',en:'¥ cash ¥60,000 + credit card',ko:'엔화 현금 ¥60,000 + 신용카드'},
+  {id:'d11',en:'Travel insurance document',ko:'여행보험 증서'},
+  {id:'d12',en:'Phone + charger + power bank',ko:'핸드폰 + 충전기 + 보조배터리'},
+];
+var MOM=[
+  {id:'m1',en:'Passport',ko:'여권'},
+  {id:'m2',en:'Warm winter coat (sightseeing, not skiing)',ko:'두꺼운 겨울 코트 (관광용)'},
+  {id:'m3',en:'Thermal base layer × 1',ko:'내복 × 1'},
+  {id:'m4',en:'Waterproof walking boots',ko:'방수 워킹 부츠'},
+  {id:'m5',en:'Warm hat & scarf',ko:'모자 & 목도리'},
+  {id:'m6',en:'Waterproof gloves (city walking)',ko:'방수 장갑 (시내 산책용)'},
+  {id:'m7',en:'Moisturizer & lip balm (cold & dry)',ko:'보습 크림 & 립밤 (방한)'},
+  {id:'m8',en:'Hand warmers × 8',ko:'핫팩 × 8개'},
+  {id:'m9',en:'Comfortable walking shoes for museums',ko:'박물관용 편한 신발'},
+  {id:'m10',en:'Small daypack for sightseeing',ko:'관광용 소형 가방'},
+  {id:'m11',en:'Phone + charger + power bank',ko:'핸드폰 + 충전기 + 보조배터리'},
+  {id:'m12',en:'¥ cash ¥30,000 for solo sightseeing days',ko:'혼자 관광용 엔화 현금 ¥30,000'},
+  {id:'m13',en:'Sapporo subway IC card or day pass (¥830/day)',ko:'삿포로 지하철 IC카드 또는 1일권 (¥830/일)'},
+];
+var ALEX=[
+  {id:'a1',en:'Passport',ko:'여권'},
+  {id:'a2',en:'Thermal base layer × 2',ko:'내복 × 2'},
+  {id:'a3',en:'Ski socks × 3 pairs',ko:'스키 양말 × 3켤레'},
+  {id:'a4',en:'Waterproof ski gloves',ko:'방수 스키 장갑'},
+  {id:'a5',en:'Neck warmer / beanie',ko:'넥워머 / 비니'},
+  {id:'a6',en:'Sunscreen SPF 50+',ko:'선크림 SPF 50+'},
+  {id:'a7',en:'Earphones (slope music)',ko:'이어폰 (슬로프 음악용)'},
+  {id:'a8',en:'Portable power bank',ko:'보조배터리'},
+  {id:'a9',en:'Hand warmers × 6',ko:'핫팩 × 6개'},
+  {id:'a10',en:'Small backpack for slopes',ko:'슬로프용 소형 백팩'},
+  {id:'a11',en:'Phone (maps + music)',ko:'핸드폰 (지도 + 음악)'},
+];
+
+function buildList(ulId,items){
+  var ul=document.getElementById(ulId);if(!ul)return;
+  ul.innerHTML='';
+  items.forEach(function(item){
+    var done=ls('chk_'+item.id)==='1';
+    var li=document.createElement('li');li.className='chk-row';li.id='cr_'+item.id;
+    li.innerHTML='<input type="checkbox" id="'+item.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+item.id+'\',this)">' +
+      '<label for="'+item.id+'" class="chk-lbl'+(done?' done':'')+'"><span class="en">'+item.en+'</span><span class="ko">'+item.ko+'</span></label>';
+    ul.appendChild(li);
+  });
+}
+function toggleC(id,cb){
+  lss('chk_'+id,cb.checked?'1':'0');
+  var lbl=cb.nextElementSibling;if(lbl)lbl.classList.toggle('done',cb.checked);
+}
+function addC(person){
+  var inp=document.getElementById(person+'-inp');
+  var txt=inp.value.trim();if(!txt)return;
+  var id=person+'_c_'+Date.now();
+  var customs=JSON.parse(ls('sp_customs_'+person)||'[]');
+  customs.push({id:id,text:txt});lss('sp_customs_'+person,JSON.stringify(customs));
+  var ul=document.getElementById('list-'+person+'-c');
+  if(ul){
+    var li=document.createElement('li');li.className='chk-row';li.id='cr_'+id;
+    li.innerHTML='<input type="checkbox" id="'+id+'" onchange="toggleC(\''+id+'\',this)">'+
+      '<label for="'+id+'" class="chk-lbl">'+txt+'</label>'+
+      '<button class="chk-del" onclick="delC(\''+id+'\',\''+person+'\')">✕</button>';
+    ul.appendChild(li);
+  }
+  inp.value='';inp.focus();
+}
+function delC(id,person){
+  var li=document.getElementById('cr_'+id);if(li)li.remove();
+  try{localStorage.removeItem('chk_'+id);}catch(e){}
+  var customs=JSON.parse(ls('sp_customs_'+person)||'[]');
+  lss('sp_customs_'+person,JSON.stringify(customs.filter(function(c){return c.id!==id;})));
+}
+function loadCustoms(person){
+  var customs=JSON.parse(ls('sp_customs_'+person)||'[]');if(!customs.length)return;
+  var ul=document.getElementById('list-'+person+'-c');if(!ul)return;
+  customs.forEach(function(c){
+    var done=ls('chk_'+c.id)==='1';
+    var li=document.createElement('li');li.className='chk-row';li.id='cr_'+c.id;
+    li.innerHTML='<input type="checkbox" id="'+c.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+c.id+'\',this)">'+
+      '<label for="'+c.id+'" class="chk-lbl'+(done?' done':'')+'">'+c.text+'</label>'+
+      '<button class="chk-del" onclick="delC(\''+c.id+'\',\''+person+'\')">✕</button>';
+    ul.appendChild(li);
+  });
+}
+
+buildList('list-bk-now',BK_NOW);
+buildList('list-bk-oct',BK_OCT);
+buildList('list-bk-nov',BK_NOV);
+loadCustoms('bk');
+buildList('list-dad',DAD);loadCustoms('dad');
+buildList('list-mom',MOM);loadCustoms('mom');
+buildList('list-alex',ALEX);loadCustoms('alex');
+</script>
+</body>
+</html>
