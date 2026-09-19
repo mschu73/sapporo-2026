@@ -54,6 +54,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 .hero-sub{font-size:0.8rem;opacity:.72;margin-bottom:14px}
 .hero-chips{display:flex;gap:6px;flex-wrap:wrap}
 .hero-chip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 11px;font-size:0.71rem;font-weight:600;color:#fff}
+.flight-board{background:#fff;color:#0d2a7a;border-radius:12px;overflow:hidden;margin:0 0 14px;box-shadow:0 4px 14px rgba(0,0,0,.18)}.flight-row{display:grid;grid-template-columns:minmax(0,1fr) 78px minmax(0,1fr);align-items:center;text-align:center;padding:11px 7px;border-bottom:1px solid #dbe4f2}.flight-row>div{min-width:0}.flight-row:last-child{border-bottom:0}.flight-date{font-size:.62rem;font-weight:700;overflow-wrap:anywhere}.flight-airport{font-size:1.55rem;line-height:1;font-weight:900;margin:3px 0}.flight-city{font-size:.65rem;line-height:1.25}.flight-mid{font-size:.72rem;font-weight:900}.flight-plane{font-size:1.45rem;line-height:1;margin:4px 0}.flight-op{font-size:.59rem;color:#64748b;line-height:1.25}.flight-air{color:#0d2a7a;font-weight:900;white-space:nowrap}.flight-seat{font-size:.6rem;color:#475569;margin-top:4px;font-weight:800}
 .dday-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .dday-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:9px 15px;text-align:center;min-width:68px}
 .dday-n{font-size:1.4rem;font-weight:900;color:#fff;line-height:1;display:block}
@@ -197,6 +198,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 .live-badge{font-size:0.63rem;background:rgba(16,185,129,.25);color:#6ee7b7;padding:2px 7px;border-radius:99px;font-weight:700}
 .conv-swap{background:rgba(255,255,255,.15);border:none;border-radius:99px;color:#fff;cursor:pointer;padding:5px 12px;font-size:0.72rem;font-weight:700;margin-left:auto}
 .conv-swap:hover{background:rgba(255,255,255,.25)}
+.budget-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:13px}.budget-top .conv-box{margin-bottom:0;padding:13px}.budget-top .conv-title{font-size:.72rem;margin-bottom:7px}.budget-top .conv-row{margin-bottom:5px}.budget-top .conv-inp{padding:7px 8px;font-size:.82rem}.budget-top .rate-row{margin-top:6px}.budget-top .conv-swap{padding:4px 8px}.budget-chart{background:var(--white);border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}.budget-chart-title{font-size:.74rem;font-weight:800;color:var(--navy);margin-bottom:6px}.pie-wrap{display:flex;align-items:center;gap:9px}.pie{width:104px;height:104px;border-radius:50%;flex:none}.pie-legend{font-size:.61rem;color:var(--ink2);line-height:1.45;min-width:0}.pie-legend div{display:flex;align-items:center;gap:4px;margin-bottom:2px}.pie-dot{width:8px;height:8px;border-radius:50%;flex:none}.actual-mark{color:var(--green);font-weight:800}.chart-note{font-size:.59rem;color:var(--muted);margin-top:6px}
 .bud-summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
 .bud-box{background:var(--white);border-radius:11px;padding:12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 .bud-val{font-size:1.1rem;font-weight:800;color:var(--ink);display:block}
@@ -217,7 +219,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 .bud-table td.diff-zero{color:var(--muted);text-align:right}
 .act-inp{width:82px;border:1.5px solid var(--border);border-radius:6px;padding:4px 5px;font-size:0.77rem;font-weight:700;color:var(--ink);background:var(--white);text-align:right}
 .act-inp:focus{outline:none;border-color:var(--sky)}
-.cur-sel{border:1px solid var(--border);border-radius:5px;font-size:0.67rem;padding:2px 3px;background:var(--white);margin-top:3px;display:block;width:100%}
+.currency-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;width:max-content}.currency-toggle button{border:0;background:var(--white);color:var(--muted);padding:4px 6px;font-size:.67rem;font-weight:800;cursor:pointer}.currency-toggle button.active{background:var(--sky);color:#fff}
 .extra-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .extra-row input{flex:1;min-width:90px;border:1.5px solid var(--border);border-radius:8px;padding:7px 8px;font-size:0.81rem;color:var(--ink)}
 .extra-row input:focus{outline:none;border-color:var(--sky)}
@@ -273,18 +275,14 @@ body.lang-ja .i18n .ja{display:inline!important}
 <div id="page-home" class="page active">
   <div class="hero">
     <div class="hero-inner">
+      <div class="flight-board">
+        <div class="flight-row i18n"><div><div class="flight-date"><span class="en">Dec 30, 2026 · 10:05</span><span class="ko">2026.12.30 (수) 10:05</span><span class="ja">2026.12.30（水）10:05</span></div><div class="flight-airport">ICN</div><div class="flight-city"><span class="en">Seoul<br>(Incheon)</span><span class="ko">서울<br>(Incheon)</span><span class="ja">ソウル<br>（仁川）</span></div></div><div class="flight-mid"><div>KE 765</div><div class="flight-plane">✈</div><div class="flight-op"><span class="en">Operated by</span><span class="ko">운항</span><span class="ja">運航</span><br><span class="flight-air">◉ KOREAN AIR</span></div></div><div><div class="flight-date"><span class="en">Dec 30, 2026 · 12:50</span><span class="ko">2026.12.30 (수) 12:50</span><span class="ja">2026.12.30（水）12:50</span></div><div class="flight-airport">CTS</div><div class="flight-city"><span class="en">Sapporo<br>(New Chitose)</span><span class="ko">삿포로<br>(신치토세공항)</span><span class="ja">札幌<br>（新千歳空港）</span></div></div></div>
+        <div class="flight-row i18n"><div><div class="flight-date"><span class="en">Jan 2, 2027 · 14:15</span><span class="ko">2027.01.02 (토) 14:15</span><span class="ja">2027.01.02（土）14:15</span></div><div class="flight-airport">CTS</div><div class="flight-city"><span class="en">Sapporo<br>(New Chitose)</span><span class="ko">삿포로<br>(신치토세공항)</span><span class="ja">札幌<br>（新千歳空港）</span></div></div><div class="flight-mid"><div>KE 766</div><div class="flight-plane">✈</div><div class="flight-op"><span class="en">Operated by</span><span class="ko">운항</span><span class="ja">運航</span><br><span class="flight-air">◉ KOREAN AIR</span></div></div><div><div class="flight-date"><span class="en">Jan 2, 2027 · 17:30</span><span class="ko">2027.01.02 (토) 17:30</span><span class="ja">2027.01.02（土）17:30</span></div><div class="flight-airport">ICN</div><div class="flight-city"><span class="en">Seoul<br>(Incheon)</span><span class="ko">서울<br>(Incheon)</span><span class="ja">ソウル<br>（仁川）</span></div></div></div>
+      </div>
       <h1 class="en">Sapporo Family Ski &amp; City Trip</h1>
       <h1 class="ko">삿포로 가족 스키 &amp; 시티 여행</h1>
       <div class="hero-sub en">Dec 30, 2026 – Jan 2, 2027 · 3 nights · Korean Air KE765/766 · Keio Plaza Hotel</div>
       <div class="hero-sub ko">2026년 12/30 – 2027년 1/2 · 3박 4일 · 대한항공 KE765/766 · 게이오 플라자 호텔</div>
-      <div class="hero-chips">
-        <span class="hero-chip en">✈️ KE765 ICN T2 10:05→CTS 12:45</span>
-        <span class="hero-chip ko">✈️ KE765 인천 T2 10:05→삿포로 12:45</span>
-        <span class="hero-chip en">⛷️ Dec 31 Teine · Jan 1 Kokusai</span>
-        <span class="hero-chip ko">⛷️ 12/31 테이네 · 1/1 국제 스키장</span>
-        <span class="hero-chip en">👨‍👩‍👦 Minsu · Irene · Alex</span>
-        <span class="hero-chip ko">👨‍👩‍👦 민수 · 아이린 · 예준</span>
-      </div>
       <div class="dday-row">
         <div class="dday-box"><span class="dday-n" id="dd-n">–</span><span class="dday-l en">days to go</span><span class="dday-l ko">출발까지</span></div>
         <div class="dday-box"><span class="dday-n">3N</span><span class="dday-l en">3 nights</span><span class="dday-l ko">3박</span></div>
@@ -311,10 +309,6 @@ body.lang-ja .i18n .ja{display:inline!important}
 
     <div class="card">
       <div class="card-title">👨‍👩‍👦 <span class="en">Trip Overview</span><span class="ko">여행 개요</span></div>
-      <div class="alert alert-ok" style="margin-bottom:9px">
-        <span class="en">✅ KE765 &amp; KE766 purchased — ₩2,600,000 total</span>
-        <span class="ko">✅ KE765 &amp; KE766 구매 완료 — 총 ₩2,600,000</span>
-      </div>
       <div class="info-grid">
         <div class="info-chip">
           <span class="ic-lbl en">⛷️ Dad &amp; Alex — Ski Track</span><span class="ic-lbl ko">⛷️ 아빠·예준 — 스키</span>
@@ -587,7 +581,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 <!-- ══ BUDGET ══ -->
 <div id="page-budget" class="page">
   <div class="wrap">
-    <div class="conv-box">
+    <div class="budget-top"><div class="conv-box">
       <div class="conv-title en">💱 Currency Converter · KRW ⇄ JPY — Live Rate</div>
       <div class="conv-title ko">💱 환율 계산기 · 원화 ⇄ 엔화 — 실시간 환율</div>
       <div class="conv-row"><span class="conv-sym">₩</span><input class="conv-inp" id="krw-inp" type="number" placeholder="Korean Won" inputmode="decimal" oninput="cvKrw()"></div>
@@ -599,7 +593,7 @@ body.lang-ja .i18n .ja{display:inline!important}
         <span class="live-badge" id="live-badge">loading…</span>
         <button class="conv-swap" onclick="swapConv()">⇄ Swap</button>
       </div>
-    </div>
+    </div><div class="budget-chart"><div class="budget-chart-title"><span class="en">📊 Budget Mix</span><span class="ko">📊 예산 비중</span><span class="ja">📊 予算構成</span></div><div id="budget-chart-body"></div></div></div>
     <div class="bud-summary">
       <div class="bud-box"><span class="bud-val" id="b-est-tot">–</span><div class="bud-lbl en">Total Estimated</div><div class="bud-lbl ko">총 예상 비용</div></div>
       <div class="bud-box"><span class="bud-val" id="b-act-tot">–</span><div class="bud-lbl en">Total Actual (₩)</div><div class="bud-lbl ko">실제 지출 합계 (₩)</div></div>
@@ -626,7 +620,8 @@ body.lang-ja .i18n .ja{display:inline!important}
       <div class="card-title">➕ <span class="en">Add Unplanned Expense</span><span class="ko">예상외 추가 비용</span></div>
       <div class="extra-row">
         <input id="ex-name" type="text" placeholder="Item / 항목">
-        <input id="ex-est" type="number" placeholder="Est ₩" inputmode="numeric" style="max-width:100px">
+        <input id="ex-amt" type="number" placeholder="Actual amount" inputmode="numeric" style="max-width:110px">
+        <div class="currency-toggle" id="ex-currency"><button type="button" class="active" onclick="setExtraCurrency('krw')">₩</button><button type="button" onclick="setExtraCurrency('jpy')">¥</button></div>
         <button class="add-btn" onclick="addExtra()"><span class="en">Add</span><span class="ko">추가</span></button>
       </div>
     </div>
@@ -696,10 +691,12 @@ function setLang(l,btn){document.body.className='lang-'+l;document.querySelector
 /* D-DAY */
 /* Enhanced family itinerary: every change of location includes a Google route. */
 function tri(en,ko,ja){ko=String(ko).replace(/아이린/g,'Irene');return '<span class="i18n"><span class="en">'+en+'</span><span class="ko">'+ko+'</span><span class="ja">'+ja+'</span></span>';}
+document.querySelectorAll('.flight-row .flight-mid').forEach(function(el,i){var seat=i===0?'31A–C':'32G–J';el.insertAdjacentHTML('beforeend','<div class="flight-seat">'+tri('Seats '+seat,'좌석 '+seat,'座席 '+seat)+'</div>');});
 function gdir(o,d,m){return 'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+'&travelmode='+(m||'walking');}
 function move(o,d,m,en,ko,ja){return '<div class="move-row"><div class="move-title">🚇 '+tri('Transfer / Direction','이동 / Direction','移動 / Direction')+'</div><div class="move-detail">'+tri(en,ko,ja)+'</div><a class="map-btn" target="_blank" href="'+gdir(o,d,m)+'">🧭 '+tri('Open Directions','길찾기 열기','経路を開く')+'</a></div>';}
-function stop(t,icon,en,ko,ja,note,transport){return '<li class="tl-row"><div class="tl-time">'+t+'</div><div class="tl-body"><strong>'+icon+' '+tri(en,ko,ja)+'</strong><span class="tl-note">'+note+'</span>'+(transport||'')+'</div></li>';}
-function restaurant(en,ko,ja,rating,q,why,price){var u='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q),origins={'Toriton Sushi Maruyama Sapporo':'Hokkaido Shrine','Soup Curry GARAKU Sapporo':'Hokkaido Shrine','Ebisoba Ichigen Sapporo':'Sapporo Beer Museum','Sapporo Ramen Republic JR Tower':'Sapporo Beer Museum','Nemuro Hanamaru JR Tower Sapporo':'Odori Park Sapporo TV Tower','Sapporo Kani Honke':'Keio Plaza Hotel Sapporo','Soup Curry GARAKU sitatte Sapporo':'Odori Park Sapporo TV Tower','Hyosetsu no Mon Sapporo':'Keio Plaza Hotel Sapporo','Kani Shogun Sapporo':'Keio Plaza Hotel Sapporo'},o=origins[q]||'Keio Plaza Hotel Sapporo';return '<div class="dinner-opt"><span class="opt-num">★</span><div class="opt-body"><span class="opt-name">'+tri(en,ko,ja)+'</span><br>'+tri(why,'현지 인기 메뉴로, 혼자 편하게 식사하기 좋은 선택입니다.','地元で人気があり、一人でも気軽に楽しめる選択です。')+'<br><span class="rating">Google ★ '+rating+'/5</span> <a class="review-btn" target="_blank" href="'+u+'">💬 '+tri('Reviews','리뷰','口コミ')+'</a><a class="map-btn" target="_blank" href="'+gdir(o,q,'transit')+'">🧭 '+tri('Directions from prior stop','이전 일정에서 길찾기','前の予定からの経路')+'</a><br><span class="opt-price">'+price+'</span></div></div>';}
+function placeUrl(name){var n=String(name).toLowerCase();if(n.indexOf('keio plaza')>=0)return'https://www.keioplaza-sapporo.co.jp/english/';if(n.indexOf('teine')>=0)return'https://sapporo-teine.com/snow/lang/en/';if(n.indexOf('kokusai')>=0)return'https://www.sapporo-kokusai.jp/en/';if(n.indexOf('hokkaido shrine')>=0)return'https://www.hokkaidojingu.or.jp/';if(n.indexOf('beer museum')>=0)return'https://www.sapporobeer.jp/english/brewery/s_museum/';if(n.indexOf('jasmac')>=0)return'https://www.jasmacplaza.jp/hotspring/';if(n.indexOf('monterey')>=0)return'https://www.hotelmonterey.co.jp/en/edelhof/spa/';if(n.indexOf('museum of modern')>=0)return'https://artmuseum.pref.hokkaido.lg.jp/knb/';return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name);}
+function stop(t,icon,en,ko,ja,note,transport){return '<li class="tl-row"><div class="tl-time">'+t+'</div><div class="tl-body"><strong>'+icon+' <a class="tl-link" target="_blank" href="'+placeUrl(en)+'">'+tri(en,ko,ja)+'</a></strong><span class="tl-note">'+note+'</span>'+(transport||'')+'</div></li>';}
+function restaurant(en,ko,ja,rating,q,why,price){var u='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q),origins={'Toriton Sushi Maruyama Sapporo':'Hokkaido Shrine','Soup Curry GARAKU Sapporo':'Hokkaido Shrine','Ebisoba Ichigen Sapporo':'Sapporo Beer Museum','Sapporo Ramen Republic JR Tower':'Sapporo Beer Museum','Nemuro Hanamaru JR Tower Sapporo':'Odori Park Sapporo TV Tower','Sapporo Kani Honke':'Keio Plaza Hotel Sapporo','Soup Curry GARAKU sitatte Sapporo':'Odori Park Sapporo TV Tower','Hyosetsu no Mon Sapporo':'Keio Plaza Hotel Sapporo','Kani Shogun Sapporo':'Keio Plaza Hotel Sapporo'},o=origins[q]||'Keio Plaza Hotel Sapporo';return '<div class="dinner-opt"><span class="opt-num">★</span><div class="opt-body"><a class="opt-name tl-link" target="_blank" href="'+u+'">'+tri(en,ko,ja)+'</a><br>'+tri(why,'현지 인기 메뉴로, 혼자 편하게 식사하기 좋은 선택입니다.','地元で人気があり、一人でも気軽に楽しめる選択です。')+'<br><span class="rating">Google ★ '+rating+'/5</span> <a class="review-btn" target="_blank" href="'+u+'">💬 '+tri('Reviews','리뷰','口コミ')+'</a><a class="map-btn" target="_blank" href="'+gdir(o,q,'transit')+'">🧭 '+tri('Directions from prior stop','이전 일정에서 길찾기','前の予定からの経路')+'</a><br><span class="opt-price">'+price+'</span></div></div>';}
 function renderItinerary(){var w=document.querySelector('#page-itin .wrap');if(!w)return;
 var d1=[
 stop('12:45','✈️','Arrive New Chitose Airport (CTS)','신치토세공항(CTS) 도착','新千歳空港（CTS）到着',tri('Allow 60–75 min for immigration, bags and customs. Purchase/top up Kitaca or Suica before the train.','입국심사·수하물·세관에 60–75분을 배정합니다. 열차 전 Kitaca/Suica를 구입·충전하세요.','入国審査・手荷物・税関に60～75分。列車前にKitaca/Suicaを購入・チャージ。'),move('New Chitose Airport International Terminal','New Chitose Airport JR Station','walking','Follow “JR” signs through the indoor link to the Domestic Terminal/JR Station (8–10 min).','실내 연결통로의 “JR” 표지를 따라 국내선 터미널 JR역까지 8–10분 이동합니다.','屋内連絡通路の「JR」表示に従い国内線ターミナルのJR駅まで8～10分。')),
@@ -758,6 +755,8 @@ addSlopeMap('d3',{en:'https://www.sapporo-kokusai.jp/en/slopes/',ko:'https://www
 /* Booking Hub: persistent per-item confirmation state. */
 function initBookingConfirmations(){document.querySelectorAll('#page-booking .bk-item').forEach(function(item,i){var key='sp_booking_confirmed_'+i,done=ls(key)==='1',body=item.querySelector('.bk-body'),link=item.querySelector('.bk-btn');if(!body)return;var tag=document.createElement('span');tag.className='bk-tag '+(done?'tag-done':'tag-now')+' booking-status';tag.textContent=done?'✅ Confirmed':'○ Pending';body.appendChild(tag);var actions=document.createElement('div');actions.className='bk-actions';if(link){link.parentNode.insertBefore(actions,link);actions.appendChild(link);}else{item.appendChild(actions);}var b=document.createElement('button');b.type='button';b.className='confirm-toggle'+(done?' is-confirmed':'');b.textContent=done?'✓ Confirmed — tap to undo':'Mark as Confirmed';b.onclick=function(){var next=ls(key)!=='1';lss(key,next?'1':'0');tag.className='bk-tag '+(next?'tag-done':'tag-now')+' booking-status';tag.textContent=next?'✅ Confirmed':'○ Pending';b.className='confirm-toggle'+(next?' is-confirmed':'');b.textContent=next?'✓ Confirmed — tap to undo':'Mark as Confirmed';};actions.appendChild(b);});}
 initBookingConfirmations();
+/* Samsung Prestige valet reservation window: approximately two months before use. */
+(function(){var valet=document.querySelector('#page-booking .bk-item');if(!valet)return;var meta=valet.querySelector('.bk-meta');if(meta)meta.innerHTML='<span class="en">Reservation opens about Oct 30, 2026 (two months before Dec 30 use). Set a reminder; booking is not yet available.</span><span class="ko">2026년 12월 30일 이용 기준 약 2개월 전인 10월 30일부터 예약 가능. 지금은 알림을 설정하세요.</span><span class="ja">2026年12月30日利用の約2か月前、10月30日頃から予約可能です。現在はリマインダーを設定してください。</span>';var tag=valet.querySelector('.bk-tag');if(tag){tag.className='bk-tag tag-oct';tag.innerHTML='<span class="en">🟡 Opens ~Oct 30</span><span class="ko">🟡 약 10/30부터</span><span class="ja">🟡 10/30頃から</span>';}})();
 (function(){var p=new URLSearchParams(location.search).get('page')||(location.hash||'').slice(1);if(['home','itin','booking','check','budget','qa'].indexOf(p)>=0){var tab=[].slice.call(document.querySelectorAll('.tab')).find(function(x){return (x.getAttribute('onclick')||'').indexOf("'"+p+"'")>=0;});if(tab)showPage(p,tab);}})();
 (function(){var dep=new Date('2026-12-30T10:05:00+09:00'),now=new Date(),diff=Math.ceil((dep-now)/86400000),el=document.getElementById('dd-n');if(el)el.textContent=diff>0?'D-'+diff:diff===0?'✈️':'🎉';})();
 
@@ -814,7 +813,7 @@ var BROWS=[
 function renderBudget(){
   var tbody=document.getElementById('btbody');if(!tbody)return;
   var cats=[...new Set(BROWS.map(r=>r.cat))];
-  var html='',totEst=0,totActKrw=0;
+  var html='',totEst=0,totActKrw=0,chartCats={};
   cats.forEach(cat=>{
     html+=`<tr class="cat-hdr"><td colspan="6">${cat}</td></tr>`;
     BROWS.filter(r=>r.cat===cat).forEach(row=>{
@@ -823,13 +822,13 @@ function renderBudget(){
       var diff=saved?actKrw-row.est:null;
       var dc=diff===null?'diff-zero':diff<0?'diff-pos':'diff-neg';
       var dt=diff===null?'–':diff<0?'▼'+fmtN(Math.abs(diff)):'▲'+fmtN(diff);
-      totEst+=row.est;if(saved&&actKrw)totActKrw+=actKrw;
+      totEst+=row.est;if(saved&&actKrw)totActKrw+=actKrw;addChartCat(chartCats,row.cat,saved&&actKrw?actKrw:row.est,!!(saved&&actKrw));
       var paidMark=row.paid?'<span style="color:var(--green);font-size:0.68rem;font-weight:700"> ✅</span>':'';
       html+=`<tr>
         <td><span class="en">${row.en}${paidMark}</span><span class="ko">${row.ko}${paidMark}</span></td>
         <td class="num">₩${fmtN(row.est)}</td>
         <td><input class="act-inp" type="number" value="${saved}" placeholder="0" onchange="saveAct('${row.id}',this.value)"></td>
-        <td><select class="cur-sel" onchange="saveCur('${row.id}',this.value)"><option value="jpy" ${isJpy?'selected':''}>¥ JPY</option><option value="krw" ${!isJpy?'selected':''}>₩ KRW</option></select></td>
+        <td><div class="currency-toggle"><button class="${isJpy?'active':''}" onclick="saveCur('${row.id}','jpy')">¥</button><button class="${!isJpy?'active':''}" onclick="saveCur('${row.id}','krw')">₩</button></div></td>
         <td class="num">${saved&&actKrw?'₩'+fmtN(actKrw):'–'}</td>
         <td class="${dc}">${dt}</td>
       </tr>`;
@@ -840,13 +839,13 @@ function renderBudget(){
     html+=`<tr class="cat-hdr"><td colspan="6">➕ Extra / Unplanned</td></tr>`;
     extras.forEach(ex=>{
       var saved=ls('act_ex_'+ex.id)||'',isJpy=ls('act_ex_'+ex.id+'_jpy')==='1',actKrw=saved?(isJpy?Math.round(parseFloat(saved)*RATE):parseInt(saved)||0):0;
-      var diff=saved?actKrw-(ex.est||0):null,dc=diff===null?'diff-zero':diff<0?'diff-pos':'diff-neg',dt=diff===null?'–':diff<0?'▼'+fmtN(Math.abs(diff)):'▲'+fmtN(diff);
-      totEst+=(ex.est||0);if(saved&&actKrw)totActKrw+=actKrw;
+      var diff=saved?actKrw:null,dc=diff===null?'diff-zero':'diff-neg',dt=diff===null?'–':'▲'+fmtN(diff);
+      if(saved&&actKrw){totActKrw+=actKrw;addChartCat(chartCats,'➕ Extra / Unplanned',actKrw,true);}
       html+=`<tr>
         <td>${ex.name} <button onclick="delExtra('${ex.id}')" style="border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.8rem">✕</button></td>
-        <td class="num">₩${fmtN(ex.est||0)}</td>
+        <td class="num">–</td>
         <td><input class="act-inp" type="number" value="${saved}" placeholder="0" onchange="saveActEx('${ex.id}',this.value)"></td>
-        <td><select class="cur-sel" onchange="saveCurEx('${ex.id}',this.value)"><option value="jpy" ${isJpy?'selected':''}>¥</option><option value="krw" ${!isJpy?'selected':''}>₩</option></select></td>
+        <td><div class="currency-toggle"><button class="${isJpy?'active':''}" onclick="saveCurEx('${ex.id}','jpy')">¥</button><button class="${!isJpy?'active':''}" onclick="saveCurEx('${ex.id}','krw')">₩</button></div></td>
         <td class="num">${saved&&actKrw?'₩'+fmtN(actKrw):'–'}</td>
         <td class="${dc}">${dt}</td>
       </tr>`;
@@ -864,20 +863,25 @@ function renderBudget(){
   var be=document.getElementById('b-est-tot'),ba=document.getElementById('b-act-tot');
   if(be)be.textContent='₩'+fmtN(totEst);
   if(ba)ba.textContent=totActKrw?'₩'+fmtN(totActKrw):'–';
+  renderBudgetChart(chartCats);
 }
+function addChartCat(cats,name,value,isActual){if(!cats[name])cats[name]={value:0,actual:false};cats[name].value+=value;cats[name].actual=cats[name].actual||isActual;}
+function renderBudgetChart(cats){var el=document.getElementById('budget-chart-body');if(!el)return;var rows=Object.keys(cats).map(function(k){return {name:k,value:cats[k].value,actual:cats[k].actual};}).filter(function(r){return r.value>0;}).sort(function(a,b){return b.value-a.value;});var total=rows.reduce(function(s,r){return s+r.value;},0);if(!total){el.innerHTML='–';return;}var colors=['#2563eb','#059669','#d97706','#7c3aed','#dc2626','#0891b2','#475569','#db2777'],start=0,parts=[];rows.forEach(function(r,i){var end=start+r.value/total*360;parts.push(colors[i%colors.length]+' '+start.toFixed(1)+'deg '+end.toFixed(1)+'deg');start=end;});var legend=rows.slice(0,5).map(function(r,i){return '<div><span class="pie-dot" style="background:'+colors[i%colors.length]+'"></span><span>'+r.name.replace(/[✈️🚗🎿🍽️♨️🎡🛍🛡➕]/g,'').trim()+' '+Math.round(r.value/total*100)+'% '+(r.actual?'<b class="actual-mark">Actual</b>':'')+'</span></div>';}).join('');el.innerHTML='<div class="pie-wrap"><div class="pie" style="background:conic-gradient('+parts.join(',')+')"></div><div class="pie-legend">'+legend+'</div></div><div class="chart-note"><span class="en">Green “Actual” means entered spend overrides estimate.</span><span class="ko">초록색 Actual은 입력한 실제금액이 예상액을 대체한 항목입니다.</span><span class="ja">緑のActualは実績金額が予算を置き換えた項目です。</span></div>';}
 function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lss(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function saveAct(id,v){if(v)lss('act_'+id,v);else{try{localStorage.removeItem('act_'+id);}catch(e){}}renderBudget();}
 function saveCur(id,v){lss('act_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
 function saveActEx(id,v){if(v)lss('act_ex_'+id,v);else{try{localStorage.removeItem('act_ex_'+id);}catch(e){}}renderBudget();}
 function saveCurEx(id,v){lss('act_ex_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
-function addExtra(){var nm=document.getElementById('ex-name').value.trim(),est=parseInt(document.getElementById('ex-est').value)||0;if(!nm)return;var extras=JSON.parse(ls('sp_extras')||'[]'),id='ex'+Date.now();extras.push({id,name:nm,est});lss('sp_extras',JSON.stringify(extras));document.getElementById('ex-name').value='';document.getElementById('ex-est').value='';renderBudget();}
+function setExtraCurrency(cur){document.querySelectorAll('#ex-currency button').forEach(function(b){b.classList.toggle('active',(cur==='jpy'&&b.textContent==='¥')||(cur==='krw'&&b.textContent==='₩'));});lss('sp_extra_currency',cur);}
+function addExtra(){var nm=document.getElementById('ex-name').value.trim(),amt=parseInt(document.getElementById('ex-amt').value)||0,cur=ls('sp_extra_currency')||'krw';if(!nm||!amt)return;var extras=JSON.parse(ls('sp_extras')||'[]'),id='ex'+Date.now();extras.push({id:id,name:nm});lss('sp_extras',JSON.stringify(extras));lss('act_ex_'+id,amt);lss('act_ex_'+id+'_jpy',cur==='jpy'?'1':'0');document.getElementById('ex-name').value='';document.getElementById('ex-amt').value='';renderBudget();}
 function delExtra(id){var extras=JSON.parse(ls('sp_extras')||'[]');lss('sp_extras',JSON.stringify(extras.filter(e=>e.id!==id)));try{localStorage.removeItem('act_ex_'+id);localStorage.removeItem('act_ex_'+id+'_jpy');}catch(e){}renderBudget();}
 renderBudget();
+setExtraCurrency(ls('sp_extra_currency')||'krw');
 
 /* CHECKLIST DATA */
 var BK_NOW=[
-  {id:'bn1',en:'Samsung Prestige — ICN T2 valet parking pre-book (Dec 30)',ko:'삼성 Prestige — 인천 T2 발렛파킹 사전 예약 (12/30)'},
+  {id:'bn1',en:'Samsung Prestige valet — booking opens about Oct 30 (2 months prior)',ko:'삼성 Prestige 발렛 — 약 10월 30일(2개월 전)부터 예약 가능'},
   {id:'bn2',en:'Keio Plaza Hotel — Standard Triple 3 nights (Dec 30 check-in)',ko:'게이오 플라자 — Standard Triple 3박 (12/30 체크인)'},
 ];
 var BK_OCT=[
@@ -900,9 +904,9 @@ var ALEX_D=[{id:'a1',en:'Passport',ko:'여권'},{id:'a2',en:'Thermal base layer 
 
 function buildList(ulId,items){var ul=document.getElementById(ulId);if(!ul)return;ul.innerHTML='';items.forEach(function(item){var done=ls('chk_'+item.id)==='1',li=document.createElement('li');li.className='chk-row';li.id='cr_'+item.id;li.innerHTML='<input type="checkbox" id="'+item.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+item.id+'\',this)">'+'<label for="'+item.id+'" class="chk-lbl'+(done?' done':'')+'"><span class="en">'+item.en+'</span><span class="ko">'+item.ko+'</span></label>';ul.appendChild(li);});}
 function toggleC(id,cb){lss('chk_'+id,cb.checked?'1':'0');var lbl=cb.nextElementSibling;if(lbl)lbl.classList.toggle('done',cb.checked);renderActionItems();}
-function addC(person){var inp=document.getElementById(person+'-inp'),txt=inp.value.trim();if(!txt)return;var id=person+'_c_'+Date.now(),customs=JSON.parse(ls('sp_customs_'+person)||'[]');customs.push({id:id,text:txt});lss('sp_customs_'+person,JSON.stringify(customs));var ul=document.getElementById('list-'+person+'-c');if(ul){var li=document.createElement('li');li.className='chk-row';li.id='cr_'+id;li.innerHTML='<input type="checkbox" id="'+id+'" onchange="toggleC(\''+id+'\',this)">'+'<label for="'+id+'" class="chk-lbl">'+txt+'</label>'+'<button class="chk-del" onclick="delC(\''+id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);}inp.value='';inp.focus();}
+function addC(person){var inp=document.getElementById(person+'-inp'),txt=inp.value.trim();if(!txt)return;var id=person+'_c_'+Date.now(),customs=JSON.parse(ls('sp_customs_'+person)||'[]');customs.push({id:id,text:txt});lss('sp_customs_'+person,JSON.stringify(customs));var ul=document.getElementById('list-'+person+'-c');if(ul){ul.parentNode.insertBefore(ul,inp.parentElement);var li=document.createElement('li');li.className='chk-row';li.id='cr_'+id;li.innerHTML='<input type="checkbox" id="'+id+'" onchange="toggleC(\''+id+'\',this)">'+'<label for="'+id+'" class="chk-lbl">'+txt+'</label>'+'<button class="chk-del" onclick="delC(\''+id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);}inp.value='';inp.focus();}
 function delC(id,person){var li=document.getElementById('cr_'+id);if(li)li.remove();try{localStorage.removeItem('chk_'+id);}catch(e){}var c=JSON.parse(ls('sp_customs_'+person)||'[]');lss('sp_customs_'+person,JSON.stringify(c.filter(function(x){return x.id!==id;})));}
-function loadCustoms(person){var c=JSON.parse(ls('sp_customs_'+person)||'[]');if(!c.length)return;var ul=document.getElementById('list-'+person+'-c');if(!ul)return;c.forEach(function(x){var done=ls('chk_'+x.id)==='1',li=document.createElement('li');li.className='chk-row';li.id='cr_'+x.id;li.innerHTML='<input type="checkbox" id="'+x.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+x.id+'\',this)">'+'<label for="'+x.id+'" class="chk-lbl'+(done?' done':'')+'">'+x.text+'</label>'+'<button class="chk-del" onclick="delC(\''+x.id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);});}
+function loadCustoms(person){var c=JSON.parse(ls('sp_customs_'+person)||'[]');if(!c.length)return;var ul=document.getElementById('list-'+person+'-c'),inp=document.getElementById(person+'-inp');if(!ul)return;if(inp)ul.parentNode.insertBefore(ul,inp.parentElement);c.forEach(function(x){var done=ls('chk_'+x.id)==='1',li=document.createElement('li');li.className='chk-row';li.id='cr_'+x.id;li.innerHTML='<input type="checkbox" id="'+x.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+x.id+'\',this)">'+'<label for="'+x.id+'" class="chk-lbl'+(done?' done':'')+'">'+x.text+'</label>'+'<button class="chk-del" onclick="delC(\''+x.id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);});}
 
 buildList('list-bk-now',BK_NOW);buildList('list-bk-oct',BK_OCT);buildList('list-bk-nov',BK_NOV);loadCustoms('bk');
 buildList('list-dad',DAD_D);loadCustoms('dad');
@@ -911,7 +915,7 @@ buildList('list-alex',ALEX_D);loadCustoms('alex');
 
 /* HOME ACTION ITEMS — dynamic based on checklist */
 var ALL_ACTION_ITEMS=[
-  {id:'bn1',priority:'red',en:'Book Samsung Prestige valet parking — ICN T2 (Dec 30)',ko:'삼성 Prestige 발렛파킹 사전 예약 — 인천 T2 (12/30)'},
+  {id:'bn1',priority:'amber',en:'Set reminder: Samsung Prestige valet booking opens about Oct 30',ko:'확인 필요: 삼성 Prestige 발렛 예약은 약 10월 30일부터 가능'},
   {id:'bn2',priority:'red',en:'Book Keio Plaza Hotel — Standard Triple 3 nights',ko:'게이오 플라자 호텔 예약 — Standard Triple 3박'},
   {id:'bo1',priority:'amber',en:'Reserve crab dinner Dec 31 (3 pax) — books out in Oct',ko:'게 요리 저녁 예약 12/31 (3인) — 10월 마감'},
   {id:'bo2',priority:'amber',en:'Book Bigruns Bus No.4401 → Teine Dec 31 (08:35)',ko:'빅런즈 버스 No.4401 테이네 12/31 (08:35) 예약'},
