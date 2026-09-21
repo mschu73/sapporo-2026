@@ -32,6 +32,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 .topbar{position:sticky;top:0;z-index:900;background:rgba(13,27,42,0.97);backdrop-filter:blur(12px);box-shadow:0 2px 12px rgba(0,0,0,.35)}
 .topbar-inner{max-width:740px;margin:0 auto;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .site-title{font-size:0.88rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:7px}
+.top-controls{display:flex;align-items:center;gap:6px;flex-shrink:0}.viewer-select{max-width:82px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:99px;padding:5px 7px;font-size:.7rem;font-weight:700;outline:none}.viewer-select option{color:var(--ink);background:#fff}
 .lang-pill{display:flex;background:rgba(255,255,255,.12);border-radius:99px;padding:2px;gap:1px;flex-shrink:0}
 .lang-btn{border:none;background:transparent;color:rgba(255,255,255,.65);padding:4px 12px;border-radius:99px;font-size:0.74rem;font-weight:700;cursor:pointer;transition:all .18s}
 .lang-btn.active{background:#fff;color:var(--navy)}
@@ -164,6 +165,7 @@ body.lang-ja .i18n .ja{display:inline!important}
 .bk-btn{flex-shrink:0;display:inline-flex;align-items:center;background:var(--sky);color:#fff!important;text-decoration:none;padding:7px 11px;border-radius:7px;font-size:0.72rem;font-weight:700;white-space:nowrap;transition:opacity .18s;align-self:center}
 .bk-btn:hover{opacity:.87}
 .bk-btn.out{background:transparent;border:2px solid var(--sky);color:var(--sky)!important}
+.bk-btn.disabled{background:#e2e8f0;color:#64748b!important;cursor:not-allowed;pointer-events:none}
 
 /* CHECKLIST */
 .person-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
@@ -236,13 +238,15 @@ body.lang-ja .i18n .ja{display:inline!important}
 .qa-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .qa-chip{background:var(--sky-l);color:var(--sky);border:1px solid var(--sky-m);border-radius:99px;padding:4px 11px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .qa-chip:hover{background:var(--sky-m)}
+.qa-template-title{font-size:.72rem;font-weight:800;color:var(--muted);margin:2px 0 7px}.qa-templates{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.qa-template{border:1px solid #d8c9ff;background:#faf8ff;border-radius:8px;color:#5b21b6;padding:8px;font-size:.72rem;font-weight:800;text-align:left;cursor:pointer}.qa-template:hover{background:#f0ebff}.qa-template small{display:block;color:#7e6aa5;font-weight:500;margin-top:2px}
 .qa-result{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;font-size:0.82rem;line-height:1.6;color:var(--ink2);min-height:60px}
 .qa-loading{color:var(--muted);font-style:italic}
 .qa-engine{display:flex;gap:7px;margin-bottom:10px}
 .qa-engine-btn{flex:1;padding:7px;border:2px solid var(--border);background:var(--white);border-radius:8px;font-size:0.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s}
 .qa-engine-btn.active{border-color:var(--sky);color:var(--sky);background:var(--sky-l)}
+.qa-location{display:flex;gap:7px;align-items:center;margin-bottom:10px}.qa-location label{font-size:.72rem;font-weight:800;color:var(--muted);white-space:nowrap}.qa-location input{flex:1;min-width:0;border:1.5px solid var(--border);border-radius:8px;padding:7px 9px;font-size:.78rem;color:var(--ink)}.qa-history{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}.qa-history-head{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:800;color:var(--muted);margin-bottom:7px}.qa-history-clear{border:0;background:none;color:var(--sky);font-size:.7rem;font-weight:800;cursor:pointer}.qa-history-item{display:block;width:100%;text-align:left;border:1px solid var(--border);background:var(--white);border-radius:7px;margin-top:5px;padding:7px 8px;font-size:.76rem;color:var(--ink);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qa-history-item:hover{background:var(--sky-l)}
 
-@media(max-width:420px){.wx-grid{grid-template-columns:repeat(2,1fr)}.info-grid{grid-template-columns:1fr}.bud-summary{grid-template-columns:1fr}}
+@media(max-width:420px){.topbar-inner{padding:7px 10px;gap:4px}.site-title{width:18px;font-size:1rem;overflow:hidden;flex-shrink:0}.site-title span{display:none}.top-controls{gap:4px}.viewer-select{max-width:72px;padding:4px 5px}.lang-btn{padding:4px 8px;font-size:.69rem}.wx-grid{grid-template-columns:repeat(2,1fr)}.info-grid{grid-template-columns:1fr}.bud-summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="lang-en">
@@ -255,10 +259,15 @@ body.lang-ja .i18n .ja{display:inline!important}
       <span class="ko">삿포로 2026 · 가족 여행</span>
       <span class="ja">札幌 2026・家族旅行</span>
     </div>
-    <div class="lang-pill">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en',this)">EN</button>
-      <button class="lang-btn" id="btn-ko" onclick="setLang('ko',this)">한국어</button>
-      <button class="lang-btn" id="btn-ja" onclick="setLang('ja',this)">日本語</button>
+    <div class="top-controls">
+      <select class="viewer-select" id="viewer-select" aria-label="Viewer profile" onchange="setViewer(this.value)">
+        <option value="alex">Alex</option><option value="minsu">Minsu</option><option value="irene">Irene</option>
+      </select>
+      <div class="lang-pill">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en',this)">EN</button>
+        <button class="lang-btn" id="btn-ko" onclick="setLang('ko',this)">한국어</button>
+        <button class="lang-btn" id="btn-ja" onclick="setLang('ja',this)">日本語</button>
+      </div>
     </div>
   </div>
   <div class="tabnav"><div class="tabnav-inner">
@@ -642,16 +651,11 @@ body.lang-ja .i18n .ja{display:inline!important}
         <button class="qa-engine-btn active" id="btn-google" onclick="selectEngine('google',this)">🔍 Google Search</button>
         <button class="qa-engine-btn" id="btn-gemini" onclick="selectEngine('gemini',this)">✨ Gemini AI</button>
       </div>
-      <div class="qa-chips">
-        <span class="qa-chip" onclick="askQ(this.textContent)">혼자 먹을 수 있는 식당 찾아줘</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">지금 근처 편의점 어디?</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">스키 초보자 팁</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">삿포로 지하철 요금</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">온천 예절</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">오늘 날씨 어때?</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">Sapporo solo dining restaurant near me</span>
-        <span class="qa-chip" onclick="askQ(this.textContent)">Kokusai ski rental prices 2026</span>
-      </div>
+      <div class="qa-location"><label id="qa-location-label" for="qa-location">📍 Current location</label><input id="qa-location" list="qa-location-suggestions" type="text" oninput="saveQaLocation()"><datalist id="qa-location-suggestions"><option value="Keio Plaza Hotel Sapporo"><option value="Sapporo Station"><option value="Odori Park / Sapporo TV Tower"><option value="New Chitose Airport (CTS)"><option value="Sapporo Teine Ski Resort"><option value="Sapporo Kokusai Ski Resort"><option value="Maruyama Park / Hokkaido Shrine"><option value="Sapporo Beer Museum"></datalist></div>
+      <div class="qa-template-title" id="qa-template-title"></div>
+      <div class="qa-templates" id="qa-templates"></div>
+      <div class="qa-template-title" id="qa-quick-title"></div>
+      <div class="qa-chips" id="qa-chips"></div>
       <div class="qa-input-row">
         <input class="qa-input" id="qa-input" type="text" placeholder="e.g. 혼자 먹을 수 있는 라멘집 추천해줘" onkeydown="if(event.key==='Enter')askQ()">
         <button class="qa-btn" onclick="askQ()"><span class="en">Ask</span><span class="ko">질문</span></button>
@@ -660,6 +664,7 @@ body.lang-ja .i18n .ja{display:inline!important}
         <span class="en" style="color:var(--muted);font-style:italic">Your answer will appear here…</span>
         <span class="ko" style="color:var(--muted);font-style:italic">답변이 여기에 나타납니다…</span>
       </div>
+      <div class="qa-history" id="qa-history"></div>
     </div>
 
     <div class="qa-box" style="margin-top:0">
@@ -685,8 +690,12 @@ function showDay(id,btn){document.querySelectorAll('.day-pane').forEach(p=>p.cla
 function showPerson(id,btn){document.querySelectorAll('.p-pane').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.person-tab').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');btn.classList.add('active');}
 
 /* LANG */
-function setLang(l,btn){document.body.className='lang-'+l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');try{localStorage.setItem('sp_lang',l);}catch(e){}}
-(function(){var saved;try{saved=localStorage.getItem('sp_lang');}catch(e){}var l=saved||'en';document.body.className='lang-'+l;document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active');});var btn=document.getElementById('btn-'+l);if(btn)btn.classList.add('active');})();
+var activeViewer='alex';
+function defaultLangFor(viewer){return viewer==='alex'?'en':'ko';}
+function applyLang(l){document.body.className='lang-'+l;document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active');});var btn=document.getElementById('btn-'+l);if(btn)btn.classList.add('active');document.dispatchEvent(new Event('tripLanguageChanged'));}
+function setLang(l,btn){applyLang(l);try{localStorage.setItem('sp_lang_'+activeViewer,l);}catch(e){}}
+function setViewer(viewer){activeViewer=viewer;try{localStorage.setItem('sp_viewer',viewer);}catch(e){}var saved;try{saved=localStorage.getItem('sp_lang_'+viewer);}catch(e){}applyLang(saved||defaultLangFor(viewer));}
+(function(){var savedViewer;try{savedViewer=localStorage.getItem('sp_viewer');}catch(e){}activeViewer=['alex','minsu','irene'].indexOf(savedViewer)>=0?savedViewer:'alex';var selector=document.getElementById('viewer-select');if(selector)selector.value=activeViewer;var savedLang;try{savedLang=localStorage.getItem('sp_lang_'+activeViewer);}catch(e){}applyLang(savedLang||defaultLangFor(activeViewer));})();
 
 /* D-DAY */
 /* Enhanced family itinerary: every change of location includes a Google route. */
@@ -752,11 +761,13 @@ var day2Tracks=document.querySelectorAll('#day-d2 .card');['track-blue','track-r
 function addSlopeMap(day,links){var card=document.querySelector('#day-'+day+' .card');if(!card)return;card.classList.add('slope-card');card.insertAdjacentHTML('afterbegin','<a class="slope-map en" target="_blank" href="'+links.en+'">🗺️ Slope Map</a><a class="slope-map ko" target="_blank" href="'+links.ko+'">🗺️ 슬로프 맵 (EN)</a><a class="slope-map ja" target="_blank" href="'+links.ja+'">🗺️ ゲレンデマップ</a>');}
 addSlopeMap('d2',{en:'https://sapporo-teine.com/snow/lang/en/mountain/',ko:'https://sapporo-teine.com/snow/lang/en/mountain/',ja:'https://sapporo-teine.com/snow/course'});
 addSlopeMap('d3',{en:'https://www.sapporo-kokusai.jp/en/slopes/',ko:'https://www.sapporo-kokusai.jp/en/slopes/',ja:'https://www.sapporo-kokusai.jp/slopes/'});
+/* Booking Hub: reservation timing takes priority over category. Current planning date: Sep 19, 2026. */
+function bookingItem(icon,en,ko,ja,metaEn,metaKo,metaJa,tag,link,label,disabled){return '<div class="bk-item"><div class="bk-icon">'+icon+'</div><div class="bk-body"><div class="bk-name">'+tri(en,ko,ja)+'</div><div class="bk-meta">'+tri(metaEn,metaKo,metaJa)+'</div><span class="bk-tag '+(disabled?'tag-oct':'tag-now')+'">'+tag+'</span></div>'+(disabled?'<span class="bk-btn disabled">'+label+'</span>':'<a class="bk-btn" target="_blank" href="'+link+'">'+label+'</a>')+'</div>';}
+function renderBookingTimeline(){var root=document.querySelector('#page-booking .wrap');if(!root)return;root.innerHTML='<div class="alert alert-sky"><strong>'+tri('Reservation timeline','예약 타임라인','予約タイムライン')+'</strong>'+tri('Ordered by booking window from the current planning date (Sep 19, 2026), not by travel category.','현재 계획 기준일(2026년 9월 19일)부터 여행 카테고리가 아닌 예약 가능 시점 순으로 정리했습니다.','現在の計画基準日（2026年9月19日）から、旅行カテゴリではなく予約可能時期順に整理しました。')+'</div><p class="bk-cat">✅ '+tri('Already confirmed','이미 확정','すでに確定')+'</p>'+bookingItem('✈️','Korean Air KE765 & KE766','대한항공 KE765 & KE766','大韓航空 KE765 & KE766','Flights purchased · seats KE765 31A–C / KE766 32G–J','항공권 구매 완료 · 좌석 KE765 31A–C / KE766 32G–J','航空券購入済み · 座席 KE765 31A–C / KE766 32G–J','✅ Confirmed','https://www.koreanair.com','Manage →')+'<p class="bk-cat">🔴 '+tri('Book now — September / October','지금 예약 — 9월 / 10월','今すぐ予約 — 9月 / 10月')+'</p>'+bookingItem('🏨','Keio Plaza Hotel Sapporo — 3 nights','게이오 플라자 호텔 삿포로 — 3박','京王プラザホテル札幌 — 3泊','Reserve before year-end inventory tightens.','연말 객실 소진 전 예약 권장.','年末の在庫が逼迫する前に予約推奨。','🔴 Book now','https://www.keioplaza-sapporo.co.jp/english/','Book →')+bookingItem('🦀','New Year’s Eve crab dinner — 3 persons','제야 게요리 석식 — 3인','大晦日カニ料理ディナー — 3名','Dec 31 peak night; secure preferred restaurant in October.','12/31 성수기 저녁이므로 10월 내 희망 식당 확보.','12/31は繁忙日。10月中に希望店を確保。','🔴 Book now','https://www.hyousetsu.co.jp/','Book →')+bookingItem('🚌','Teine shuttle — Dec 31','테이네 셔틀 — 12월 31일','テイネ送迎 — 12月31日','Bigruns: reserve at least 10 days before; book early.','빅런즈: 최소 10일 전 예약, 조기 예약 권장.','Bigruns：最低10日前までに予約、早期予約推奨。','🟡 By mid-Oct','https://bigruns.com/','Book →')+bookingItem('🚌','Kokusai direct bus — Jan 1','국제 스키장 직행버스 — 1월 1일','国際スキー場直行バス — 1月1日','Holiday service; secure seats before the year-end rush.','연휴 운행이므로 연말 혼잡 전 좌석 확보.','年始運行のため年末混雑前に座席確保。','🟡 By mid-Oct','https://teikan.chuo-bus.co.jp/en/course/12403','Book →')+'<p class="bk-cat">🗓️ '+tri('Oct 30 — reservation window opens','10월 30일 — 예약 오픈','10月30日 — 予約開始')+'</p>'+bookingItem('🚗','ICN T2 Samsung Prestige valet','인천 T2 삼성 Prestige 발렛','仁川T2 Samsung Prestige バレット','Reservation opens approximately two months before Dec 30 use.','12월 30일 이용 약 2개월 전부터 예약 가능.','12月30日利用の約2か月前から予約可能。','🟡 Opens Oct 30','','Opens Oct 30',true)+'<p class="bk-cat">🟢 '+tri('Before departure — November / December','출발 전 — 11월 / 12월','出発前 — 11月 / 12月')+'</p>'+bookingItem('🛡️','Travel insurance ×3','여행자보험 ×3인','海外旅行保険 ×3名','Purchase ski coverage after the itinerary is finalized.','일정 확정 후 스키 특약 포함 가입.','日程確定後、スキー補償付きで加入。','🟢 Before departure','https://www.db-ins.com/traveler/','Quote →')+bookingItem('🌐','Visit Japan Web — 3 travelers','Visit Japan Web — 3인','Visit Japan Web — 3名','Register immigration QR codes before departure.','출발 전 입국 QR코드 등록.','出発前に入国QRコードを登録。','🟢 Before departure','https://vjw-lp.digital.go.jp/en/','Register →')+bookingItem('📱','Japan eSIM ×3','일본 eSIM ×3인','日本 eSIM ×3名','Purchase 1–2 weeks before departure.','출발 1–2주 전 구매.','出発1～2週間前に購入。','🟢 Mid-Dec','https://www.google.com/search?q=Japan+eSIM','Buy →')+bookingItem('✈️','Korean Air online check-in','대한항공 온라인 체크인','大韓航空オンラインチェックイン','Available 24 hours before KE765 departure.','KE765 출발 24시간 전부터 가능.','KE765出発24時間前から可能。','🟢 Dec 29','https://www.koreanair.com/','Check in →');}
+renderBookingTimeline();
 /* Booking Hub: persistent per-item confirmation state. */
-function initBookingConfirmations(){document.querySelectorAll('#page-booking .bk-item').forEach(function(item,i){var key='sp_booking_confirmed_'+i,done=ls(key)==='1',body=item.querySelector('.bk-body'),link=item.querySelector('.bk-btn');if(!body)return;var tag=document.createElement('span');tag.className='bk-tag '+(done?'tag-done':'tag-now')+' booking-status';tag.textContent=done?'✅ Confirmed':'○ Pending';body.appendChild(tag);var actions=document.createElement('div');actions.className='bk-actions';if(link){link.parentNode.insertBefore(actions,link);actions.appendChild(link);}else{item.appendChild(actions);}var b=document.createElement('button');b.type='button';b.className='confirm-toggle'+(done?' is-confirmed':'');b.textContent=done?'✓ Confirmed — tap to undo':'Mark as Confirmed';b.onclick=function(){var next=ls(key)!=='1';lss(key,next?'1':'0');tag.className='bk-tag '+(next?'tag-done':'tag-now')+' booking-status';tag.textContent=next?'✅ Confirmed':'○ Pending';b.className='confirm-toggle'+(next?' is-confirmed':'');b.textContent=next?'✓ Confirmed — tap to undo':'Mark as Confirmed';};actions.appendChild(b);});}
+function initBookingConfirmations(){document.querySelectorAll('#page-booking .bk-item').forEach(function(item,i){var key='sp_booking_confirmed_'+i,done=ls(key)==='1'||item.querySelector('.bk-tag').textContent.indexOf('Confirmed')>=0,body=item.querySelector('.bk-body'),link=item.querySelector('.bk-btn');if(done)lss(key,'1');if(!body)return;var tag=document.createElement('span');tag.className='bk-tag '+(done?'tag-done':'tag-now')+' booking-status';tag.textContent=done?'✅ Confirmed':'○ Pending';body.appendChild(tag);var actions=document.createElement('div');actions.className='bk-actions';if(link){link.parentNode.insertBefore(actions,link);actions.appendChild(link);}else{item.appendChild(actions);}var b=document.createElement('button');b.type='button';b.className='confirm-toggle'+(done?' is-confirmed':'');b.textContent=done?'✓ Confirmed — tap to undo':'Mark as Confirmed';b.onclick=function(){var next=ls(key)!=='1';lss(key,next?'1':'0');tag.className='bk-tag '+(next?'tag-done':'tag-now')+' booking-status';tag.textContent=next?'✅ Confirmed':'○ Pending';b.className='confirm-toggle'+(next?' is-confirmed':'');b.textContent=next?'✓ Confirmed — tap to undo':'Mark as Confirmed';};actions.appendChild(b);});}
 initBookingConfirmations();
-/* Samsung Prestige valet reservation window: approximately two months before use. */
-(function(){var valet=document.querySelector('#page-booking .bk-item');if(!valet)return;var meta=valet.querySelector('.bk-meta');if(meta)meta.innerHTML='<span class="en">Reservation opens about Oct 30, 2026 (two months before Dec 30 use). Set a reminder; booking is not yet available.</span><span class="ko">2026년 12월 30일 이용 기준 약 2개월 전인 10월 30일부터 예약 가능. 지금은 알림을 설정하세요.</span><span class="ja">2026年12月30日利用の約2か月前、10月30日頃から予約可能です。現在はリマインダーを設定してください。</span>';var tag=valet.querySelector('.bk-tag');if(tag){tag.className='bk-tag tag-oct';tag.innerHTML='<span class="en">🟡 Opens ~Oct 30</span><span class="ko">🟡 약 10/30부터</span><span class="ja">🟡 10/30頃から</span>';}})();
 (function(){var p=new URLSearchParams(location.search).get('page')||(location.hash||'').slice(1);if(['home','itin','booking','check','budget','qa'].indexOf(p)>=0){var tab=[].slice.call(document.querySelectorAll('.tab')).find(function(x){return (x.getAttribute('onclick')||'').indexOf("'"+p+"'")>=0;});if(tab)showPage(p,tab);}})();
 (function(){var dep=new Date('2026-12-30T10:05:00+09:00'),now=new Date(),diff=Math.ceil((dep-now)/86400000),el=document.getElementById('dd-n');if(el)el.textContent=diff>0?'D-'+diff:diff===0?'✈️':'🎉';})();
 
@@ -842,7 +853,7 @@ function renderBudget(){
       var diff=saved?actKrw:null,dc=diff===null?'diff-zero':'diff-neg',dt=diff===null?'–':'▲'+fmtN(diff);
       if(saved&&actKrw){totActKrw+=actKrw;addChartCat(chartCats,'➕ Extra / Unplanned',actKrw,true);}
       html+=`<tr>
-        <td>${ex.name} <button onclick="delExtra('${ex.id}')" style="border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.8rem">✕</button></td>
+        <td>${localizedSpans(ex)} <button onclick="delExtra('${ex.id}')" style="border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.8rem">✕</button></td>
         <td class="num">–</td>
         <td><input class="act-inp" type="number" value="${saved}" placeholder="0" onchange="saveActEx('${ex.id}',this.value)"></td>
         <td><div class="currency-toggle"><button class="${isJpy?'active':''}" onclick="saveCurEx('${ex.id}','jpy')">¥</button><button class="${!isJpy?'active':''}" onclick="saveCurEx('${ex.id}','krw')">₩</button></div></td>
@@ -869,12 +880,18 @@ function addChartCat(cats,name,value,isActual){if(!cats[name])cats[name]={value:
 function renderBudgetChart(cats){var el=document.getElementById('budget-chart-body');if(!el)return;var rows=Object.keys(cats).map(function(k){return {name:k,value:cats[k].value,actual:cats[k].actual};}).filter(function(r){return r.value>0;}).sort(function(a,b){return b.value-a.value;});var total=rows.reduce(function(s,r){return s+r.value;},0);if(!total){el.innerHTML='–';return;}var colors=['#2563eb','#059669','#d97706','#7c3aed','#dc2626','#0891b2','#475569','#db2777'],start=0,parts=[];rows.forEach(function(r,i){var end=start+r.value/total*360;parts.push(colors[i%colors.length]+' '+start.toFixed(1)+'deg '+end.toFixed(1)+'deg');start=end;});var legend=rows.slice(0,5).map(function(r,i){return '<div><span class="pie-dot" style="background:'+colors[i%colors.length]+'"></span><span>'+r.name.replace(/[✈️🚗🎿🍽️♨️🎡🛍🛡➕]/g,'').trim()+' '+Math.round(r.value/total*100)+'% '+(r.actual?'<b class="actual-mark">Actual</b>':'')+'</span></div>';}).join('');el.innerHTML='<div class="pie-wrap"><div class="pie" style="background:conic-gradient('+parts.join(',')+')"></div><div class="pie-legend">'+legend+'</div></div><div class="chart-note"><span class="en">Green “Actual” means entered spend overrides estimate.</span><span class="ko">초록색 Actual은 입력한 실제금액이 예상액을 대체한 항목입니다.</span><span class="ja">緑のActualは実績金額が予算を置き換えた項目です。</span></div>';}
 function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lss(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function escHtml(v){return String(v||'').replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];});}
+function detectTextLang(text){if(/[\uac00-\ud7a3]/.test(text))return'ko';if(/[\u3040-\u30ff]/.test(text))return'ja';return'en';}
+function normalizedLocaleEntry(item){var text=item.text||item.name||'';var src=item.source||detectTextLang(text);return {id:item.id,source:src,en:item.en||((src==='en')?text:''),ko:item.ko||((src==='ko')?text:''),ja:item.ja||((src==='ja')?text:''),text:text,name:text};}
+function localizedSpans(item){var e=normalizedLocaleEntry(item),fallback=e[e.source]||e.text||e.name||'';return '<span class="i18n"><span class="en">'+escHtml(e.en||fallback)+'</span><span class="ko">'+escHtml(e.ko||fallback)+'</span><span class="ja">'+escHtml(e.ja||fallback)+'</span></span>';}
+async function translateOne(text,source,target){if(source===target)return text;try{var u='https://translate.googleapis.com/translate_a/single?client=gtx&sl='+source+'&tl='+target+'&dt=t&q='+encodeURIComponent(text),r=await fetch(u),d=await r.json();return d&&d[0]?d[0].map(function(x){return x[0];}).join(''):text;}catch(e){return text;}}
+async function localizeEntry(text){var source=detectTextLang(text),out={source:source};out[source]=text;var targets=['en','ko','ja'].filter(function(x){return x!==source;});var values=await Promise.all(targets.map(function(t){return translateOne(text,source,t);}));targets.forEach(function(t,i){out[t]=values[i]||text;});return out;}
 function saveAct(id,v){if(v)lss('act_'+id,v);else{try{localStorage.removeItem('act_'+id);}catch(e){}}renderBudget();}
 function saveCur(id,v){lss('act_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
 function saveActEx(id,v){if(v)lss('act_ex_'+id,v);else{try{localStorage.removeItem('act_ex_'+id);}catch(e){}}renderBudget();}
 function saveCurEx(id,v){lss('act_ex_'+id+'_jpy',v==='jpy'?'1':'0');renderBudget();}
 function setExtraCurrency(cur){document.querySelectorAll('#ex-currency button').forEach(function(b){b.classList.toggle('active',(cur==='jpy'&&b.textContent==='¥')||(cur==='krw'&&b.textContent==='₩'));});lss('sp_extra_currency',cur);}
-function addExtra(){var nm=document.getElementById('ex-name').value.trim(),amt=parseInt(document.getElementById('ex-amt').value)||0,cur=ls('sp_extra_currency')||'krw';if(!nm||!amt)return;var extras=JSON.parse(ls('sp_extras')||'[]'),id='ex'+Date.now();extras.push({id:id,name:nm});lss('sp_extras',JSON.stringify(extras));lss('act_ex_'+id,amt);lss('act_ex_'+id+'_jpy',cur==='jpy'?'1':'0');document.getElementById('ex-name').value='';document.getElementById('ex-amt').value='';renderBudget();}
+async function addExtra(){var nm=document.getElementById('ex-name').value.trim(),amt=parseInt(document.getElementById('ex-amt').value)||0,cur=ls('sp_extra_currency')||'krw';if(!nm||!amt)return;var extras=JSON.parse(ls('sp_extras')||'[]'),id='ex'+Date.now(),entry=await localizeEntry(nm);entry.id=id;extras.push(entry);lss('sp_extras',JSON.stringify(extras));lss('act_ex_'+id,amt);lss('act_ex_'+id+'_jpy',cur==='jpy'?'1':'0');document.getElementById('ex-name').value='';document.getElementById('ex-amt').value='';renderBudget();}
 function delExtra(id){var extras=JSON.parse(ls('sp_extras')||'[]');lss('sp_extras',JSON.stringify(extras.filter(e=>e.id!==id)));try{localStorage.removeItem('act_ex_'+id);localStorage.removeItem('act_ex_'+id+'_jpy');}catch(e){}renderBudget();}
 renderBudget();
 setExtraCurrency(ls('sp_extra_currency')||'krw');
@@ -904,9 +921,10 @@ var ALEX_D=[{id:'a1',en:'Passport',ko:'여권'},{id:'a2',en:'Thermal base layer 
 
 function buildList(ulId,items){var ul=document.getElementById(ulId);if(!ul)return;ul.innerHTML='';items.forEach(function(item){var done=ls('chk_'+item.id)==='1',li=document.createElement('li');li.className='chk-row';li.id='cr_'+item.id;li.innerHTML='<input type="checkbox" id="'+item.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+item.id+'\',this)">'+'<label for="'+item.id+'" class="chk-lbl'+(done?' done':'')+'"><span class="en">'+item.en+'</span><span class="ko">'+item.ko+'</span></label>';ul.appendChild(li);});}
 function toggleC(id,cb){lss('chk_'+id,cb.checked?'1':'0');var lbl=cb.nextElementSibling;if(lbl)lbl.classList.toggle('done',cb.checked);renderActionItems();}
-function addC(person){var inp=document.getElementById(person+'-inp'),txt=inp.value.trim();if(!txt)return;var id=person+'_c_'+Date.now(),customs=JSON.parse(ls('sp_customs_'+person)||'[]');customs.push({id:id,text:txt});lss('sp_customs_'+person,JSON.stringify(customs));var ul=document.getElementById('list-'+person+'-c');if(ul){ul.parentNode.insertBefore(ul,inp.parentElement);var li=document.createElement('li');li.className='chk-row';li.id='cr_'+id;li.innerHTML='<input type="checkbox" id="'+id+'" onchange="toggleC(\''+id+'\',this)">'+'<label for="'+id+'" class="chk-lbl">'+txt+'</label>'+'<button class="chk-del" onclick="delC(\''+id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);}inp.value='';inp.focus();}
+function customChecklistHtml(x,person){var done=ls('chk_'+x.id)==='1';return '<input type="checkbox" id="'+x.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+x.id+'\',this)">'+'<label for="'+x.id+'" class="chk-lbl'+(done?' done':'')+'">'+localizedSpans(x)+'</label>'+'<button class="chk-del" onclick="delC(\''+x.id+'\',\''+person+'\')">✕</button>';}
+async function addC(person){var inp=document.getElementById(person+'-inp'),txt=inp.value.trim();if(!txt)return;var id=person+'_c_'+Date.now(),customs=JSON.parse(ls('sp_customs_'+person)||'[]'),entry=await localizeEntry(txt);entry.id=id;customs.push(entry);lss('sp_customs_'+person,JSON.stringify(customs));var ul=document.getElementById('list-'+person+'-c');if(ul){ul.parentNode.insertBefore(ul,inp.parentElement);var li=document.createElement('li');li.className='chk-row';li.id='cr_'+id;li.innerHTML=customChecklistHtml(entry,person);ul.appendChild(li);}inp.value='';inp.focus();}
 function delC(id,person){var li=document.getElementById('cr_'+id);if(li)li.remove();try{localStorage.removeItem('chk_'+id);}catch(e){}var c=JSON.parse(ls('sp_customs_'+person)||'[]');lss('sp_customs_'+person,JSON.stringify(c.filter(function(x){return x.id!==id;})));}
-function loadCustoms(person){var c=JSON.parse(ls('sp_customs_'+person)||'[]');if(!c.length)return;var ul=document.getElementById('list-'+person+'-c'),inp=document.getElementById(person+'-inp');if(!ul)return;if(inp)ul.parentNode.insertBefore(ul,inp.parentElement);c.forEach(function(x){var done=ls('chk_'+x.id)==='1',li=document.createElement('li');li.className='chk-row';li.id='cr_'+x.id;li.innerHTML='<input type="checkbox" id="'+x.id+'" '+(done?'checked':'')+' onchange="toggleC(\''+x.id+'\',this)">'+'<label for="'+x.id+'" class="chk-lbl'+(done?' done':'')+'">'+x.text+'</label>'+'<button class="chk-del" onclick="delC(\''+x.id+'\',\''+person+'\')">✕</button>';ul.appendChild(li);});}
+function loadCustoms(person){var c=JSON.parse(ls('sp_customs_'+person)||'[]');if(!c.length)return;var ul=document.getElementById('list-'+person+'-c'),inp=document.getElementById(person+'-inp');if(!ul)return;if(inp)ul.parentNode.insertBefore(ul,inp.parentElement);c.forEach(function(x){var li=document.createElement('li');li.className='chk-row';li.id='cr_'+x.id;li.innerHTML=customChecklistHtml(x,person);ul.appendChild(li);});}
 
 buildList('list-bk-now',BK_NOW);buildList('list-bk-oct',BK_OCT);buildList('list-bk-nov',BK_NOV);loadCustoms('bk');
 buildList('list-dad',DAD_D);loadCustoms('dad');
@@ -945,44 +963,84 @@ renderActionItems();
 
 /* Q&A */
 var qaEngine='google';
+var lastQaQuery=null;
+function itineraryLocationNow(){var n=new Date(),m=n.getMonth()+1,d=n.getDate(),h=n.getHours();if(m===12&&d===30){if(h<14)return'New Chitose Airport (CTS)';if(h<15)return'Sapporo Station';if(h<17)return'Keio Plaza Hotel Sapporo';if(h<20)return'Odori Park / Sapporo TV Tower';}if(m===12&&d===31&&h>=8&&h<16)return'Sapporo Teine Ski Resort';if(m===1&&d===1&&h>=8&&h<16)return'Sapporo Kokusai Ski Resort';if(m===1&&d===2&&h>=11)return'New Chitose Airport (CTS)';return'Keio Plaza Hotel Sapporo';}
+function initQaLocation(){var el=document.getElementById('qa-location');if(el)el.value=ls('sp_qa_location')||itineraryLocationNow();}
+function saveQaLocation(){var el=document.getElementById('qa-location');if(el)lss('sp_qa_location',el.value.trim());}
+function qaLocation(){var el=document.getElementById('qa-location'),v=el&&el.value.trim();return v||itineraryLocationNow();}
 function selectEngine(e,btn){qaEngine=e;document.querySelectorAll('.qa-engine-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function currentLang(){return document.body.classList.contains('lang-ja')?'ja':document.body.classList.contains('lang-ko')?'ko':'en';}
+var QA_TEMPLATES={
+  restaurant:{icon:'🍣',label:{en:'Restaurant',ko:'식당',ja:'レストラン'},sub:{en:'route · wait · price',ko:'동선 · 대기 · 가격',ja:'経路・待ち時間・価格'},prompt:{en:'Act as a Sapporo restaurant concierge. Recommend the best nearby option for my situation. Include Google rating, estimated wait, price, reservation need, and exact walking or public-transit directions from my current location: [enter location].',ko:'삿포로 식당 컨시어지로 답변해줘. 내 상황에 가장 적합한 주변 식당을 추천하고 Google 평점, 예상 대기시간, 가격, 예약 필요 여부, 현재 위치 [위치 입력]에서의 도보 또는 대중교통 상세 동선을 포함해줘.',ja:'札幌のレストランコンシェルジュとして回答してください。私の状況に最適な近くの店を提案し、Google評価、予想待ち時間、価格、予約の要否、現在地［場所を入力］からの徒歩または公共交通機関の詳細ルートを含めてください。'}},
+  transport:{icon:'🚇',label:{en:'Transport',ko:'교통',ja:'交通'},sub:{en:'step-by-step route',ko:'단계별 이동 경로',ja:'手順別ルート'},prompt:{en:'Plan a simple, step-by-step public-transport route in Sapporo from [origin] to [destination] now. Include the correct station exits, line/platform, fare, transfers, travel time, last-train risk, and a Google Maps link.',ko:'현재 삿포로에서 [출발지]에서 [도착지]까지 가장 쉬운 대중교통 이동을 단계별로 알려줘. 정확한 출구, 노선/승강장, 요금, 환승, 소요시간, 막차 리스크와 Google Maps 링크를 포함해줘.',ja:'現在の札幌で［出発地］から［目的地］まで、最も簡単な公共交通機関の移動を手順ごとに案内してください。正しい出口、路線・ホーム、運賃、乗換、所要時間、終電リスク、Google Mapsリンクを含めてください。'}},
+  ski:{icon:'🎿',label:{en:'Ski',ko:'스키',ja:'スキー'},sub:{en:'conditions · safety · rentals',ko:'적설 · 안전 · 렌탈',ja:'積雪・安全・レンタル'},prompt:{en:'Act as a Hokkaido ski adviser for [Teine / Kokusai]. Check today’s conditions, beginner-friendly courses, lift status, rental requirements, warm-up / safety advice, lunch options, and a realistic return-bus plan.',ko:'[테이네 / 국제] 스키장 홋카이도 스키 전문가로 답변해줘. 오늘의 적설·운영 현황, 초보자 코스, 리프트 상태, 렌탈 준비물, 워밍업·안전 팁, 점심 옵션, 현실적인 귀가 버스 계획을 알려줘.',ja:'［テイネ／国際］の北海道スキーアドバイザーとして回答してください。今日の積雪・営業状況、初心者コース、リフト運行、レンタルの準備物、ウォームアップ・安全アドバイス、昼食、現実的な帰りのバス計画を教えてください。'}},
+  emergency:{icon:'🆘',label:{en:'Emergency',ko:'긴급상황',ja:'緊急時'},sub:{en:'medical · police · lost item',ko:'의료 · 경찰 · 분실물',ja:'医療・警察・紛失'},prompt:{en:'I need urgent travel assistance in Sapporo: [describe situation]. Give the safest immediate steps, relevant Japanese emergency number, nearby suitable service, a short Japanese phrase to show staff, and what documents or payment I should prepare.',ko:'삿포로에서 긴급 도움이 필요해: [상황 입력]. 가장 안전한 즉시 행동, 관련 일본 긴급전화번호, 가까운 적합한 서비스, 직원에게 보여줄 짧은 일본어 문장, 준비할 서류·결제수단을 알려줘.',ja:'札幌で緊急の支援が必要です：［状況を入力］。最も安全な即時対応、関連する日本の緊急番号、近くの適切な窓口、スタッフに見せる短い日本語、準備する書類・支払い方法を教えてください。'}}
+};
+var QA_QUICK={en:['Where is the nearest convenience store?','Which subway exit should I use?','Can I recharge my IC card here?','Where is an ATM that accepts foreign cards?','Which pharmacy is open now?','What is the last train back to Sapporo Station?','I lost an item — what should I do?','Please show this taxi driver my destination in Japanese.'],ko:['지금 가장 가까운 편의점은 어디야?','어느 지하철 출구로 나가야 해?','여기서 IC카드를 충전할 수 있어?','해외카드가 되는 ATM은 어디야?','지금 여는 약국은 어디야?','삿포로역으로 가는 막차는 몇 시야?','물건을 잃어버렸어. 어떻게 해야 해?','택시기사에게 목적지를 일본어로 보여줘.'],ja:['今一番近いコンビニはどこですか？','どの地下鉄出口を使えばよいですか？','ここでICカードをチャージできますか？','海外カードが使えるATMはどこですか？','今開いている薬局はどこですか？','札幌駅へ戻る終電は何時ですか？','物をなくしました。どうすればよいですか？','タクシー運転手に目的地を日本語で見せてください。']};
+function renderQaTools(){var lang=currentLang(),t=document.getElementById('qa-template-title'),box=document.getElementById('qa-templates'),quickTitle=document.getElementById('qa-quick-title'),quick=document.getElementById('qa-chips'),inp=document.getElementById('qa-input'),locLabel=document.getElementById('qa-location-label');if(!t||!box||!quickTitle||!quick)return;t.textContent={en:'GEMINI TRAVEL TEMPLATES',ko:'GEMINI 여행 템플릿',ja:'GEMINI 旅行テンプレート'}[lang];quickTitle.textContent={en:'FREQUENT LOCAL QUESTIONS',ko:'현지에서 자주 묻는 질문',ja:'現地でよく使う質問'}[lang];if(locLabel)locLabel.textContent={en:'📍 Current itinerary location',ko:'📍 현재 일정 위치',ja:'📍 現在の旅程場所'}[lang];if(inp)inp.placeholder={en:'e.g. Recommend a solo ramen restaurant near me',ko:'예: 지금 근처 혼밥 라멘집 추천해줘',ja:'例：近くで一人でも入りやすいラーメン店を教えて'}[lang];box.innerHTML=Object.keys(QA_TEMPLATES).map(function(id){var x=QA_TEMPLATES[id];return '<button type="button" class="qa-template" onclick="askTemplate(\''+id+'\')">'+x.icon+' '+x.label[lang]+'<small>'+x.sub[lang]+'</small></button>';}).join('');quick.innerHTML=QA_QUICK[lang].map(function(q){return '<button type="button" class="qa-chip" onclick="askQ('+JSON.stringify(q).replace(/&/g,'&amp;').replace(/"/g,'&quot;')+')">'+escHtml(q)+'</button>';}).join('');}
+function askTemplate(id){var lang=currentLang(),location=qaLocation(),prompt=QA_TEMPLATES[id].prompt[lang],gem=document.getElementById('btn-gemini');prompt=prompt.replace(/[\[［](?:enter location|위치 입력|場所を入力|origin|출발지|出発地)[\]］]/g,location)+'\n\n'+{en:'Current itinerary location: ',ko:'현재 일정 위치: ',ja:'現在の旅程場所：'}[lang]+location;if(gem)selectEngine('gemini',gem);var inp=document.getElementById('qa-input');if(inp)inp.value=prompt;askQ();}
+function prepareGeminiPrompt(encodedPrompt){
+  var prompt=decodeURIComponent(encodedPrompt);
+  var fallback=function(){var t=document.createElement('textarea');t.value=prompt;t.setAttribute('readonly','');t.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(t);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(prompt).catch(fallback);}else{fallback();}
+  return true;
+}
+function qaHistoryItems(){try{return JSON.parse(ls('sp_qa_history')||'[]');}catch(e){return [];}}
+function storeQaHistory(items){lss('sp_qa_history',JSON.stringify(items.slice(0,5)));}
+function upsertQaHistory(id,entry,engine){var items=qaHistoryItems().filter(function(x){return x.id!==id;});entry.id=id;entry.engine=engine;items.unshift(entry);storeQaHistory(items);renderQaHistory();}
+function renderQaHistory(){var el=document.getElementById('qa-history');if(!el)return;var items=qaHistoryItems(),lang=currentLang();if(!items.length){el.innerHTML='';return;}var title={en:'RECENT QUESTIONS',ko:'최근 질문 기록',ja:'最近の質問'}[lang],clear={en:'Clear',ko:'전체 삭제',ja:'すべて削除'}[lang];el.innerHTML='<div class="qa-history-head"><span>🕘 '+title+' · '+items.length+'/5</span><button class="qa-history-clear" type="button" onclick="clearQaHistory()">'+clear+'</button></div>'+items.map(function(x){return '<button class="qa-history-item" type="button" onclick="rerunQaHistory(\''+x.id+'\')">'+localizedSpans(x)+'</button>';}).join('');}
+function clearQaHistory(){try{localStorage.removeItem('sp_qa_history');}catch(e){}renderQaHistory();}
+function rerunQaHistory(id){var item=qaHistoryItems().find(function(x){return x.id===id;});if(!item)return;lastQaQuery=item;qaEngine=item.engine||'google';var btn=document.getElementById('btn-'+qaEngine);if(btn)selectEngine(qaEngine,btn);renderQaResult(lastQaQuery);}
 function askQ(q){
   var inp=document.getElementById('qa-input');
-  var query=(q||inp.value).trim();
-  if(!query)return;
+  var raw=(q||inp.value).trim();
+  if(!raw)return;
   if(!q)inp.value='';
+  lastQaQuery=normalizedLocaleEntry({text:raw});
+  var historyId='q'+Date.now(),historyEngine=qaEngine;
+  upsertQaHistory(historyId,lastQaQuery,historyEngine);
+  renderQaResult(lastQaQuery);
+  localizeEntry(raw).then(function(entry){lastQaQuery=entry;upsertQaHistory(historyId,entry,historyEngine);renderQaResult(lastQaQuery);});
+}
+function renderQaResult(entry){
+  var query=(entry[currentLang()]||entry[entry.source]||entry.text||'').trim();
+  if(!query)return;
   var result=document.getElementById('qa-result');
   result.innerHTML='<span class="qa-loading">Searching… 잠시만요…</span>';
+  var lang=currentLang(),safeQuery=escHtml(query);
   if(qaEngine==='google'){
-    var searchQ=encodeURIComponent('Sapporo Japan travel '+query);
-    var url='https://www.google.com/search?q='+searchQ+'&hl=en';
+    var searchPrefix={en:'Sapporo Japan travel ',ko:'삿포로 일본 여행 ',ja:'札幌 日本 旅行 '}[lang],searchQ=encodeURIComponent(searchPrefix+query);
+    var url='https://www.google.com/search?q='+searchQ+'&hl='+lang+'&gl=jp';
     result.innerHTML=`<div style="font-size:0.82rem;line-height:1.7;color:var(--ink2)">
-      <strong class="en">Opening Google Search for:</strong><strong class="ko">구글 검색 중:</strong>
-      <div style="color:var(--sky);margin:6px 0;font-weight:600">"${query}"</div>
+      <strong>${tri('Opening Google Search for:','구글 검색 중:','Google検索を開きます:')}</strong>
+      <div style="color:var(--sky);margin:6px 0;font-weight:600">"${safeQuery}"</div>
       <a href="${url}" target="_blank" style="display:block;background:var(--sky);color:#fff;text-align:center;padding:10px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">
-        🔍 <span class="en">Open Google Search</span><span class="ko">구글 검색 열기</span> →
+        🔍 ${tri('Open Google Search','구글 검색 열기','Google検索を開く')} →
       </a>
       <div style="margin-top:10px;font-size:0.75rem;color:var(--muted)">
-        <span class="en">Tap above to open Google in a new tab with Sapporo travel context added to your query.</span>
-        <span class="ko">위 버튼을 탭하면 삿포로 여행 컨텍스트가 추가된 구글 검색이 새 탭으로 열립니다.</span>
+        ${tri('Google result language follows the current dashboard language.','Google 검색 결과 언어는 현재 대시보드 언어를 따릅니다.','Google検索結果の言語は現在のダッシュボード言語に連動します。')}
       </div>
     </div>`;
   } else {
-    var geminiQ=encodeURIComponent('삿포로 여행 전문가로서 답변해줘: '+query+'. 구체적이고 실용적인 답변을 주고, 가게 이름이나 장소가 있으면 포함해줘.');
-    var geminiUrl='https://gemini.google.com/app?q='+geminiQ;
+    var geminiIntro={en:'Answer as a Sapporo travel expert: ',ko:'삿포로 여행 전문가로서 답변해줘: ',ja:'札幌旅行の専門家として回答してください：'}[lang],geminiPrompt=geminiIntro+query;
+    var geminiQ=encodeURIComponent(geminiPrompt);
+    var geminiUrl='https://gemini.google.com/app?hl='+lang+'&prompt='+geminiQ;
     result.innerHTML=`<div style="font-size:0.82rem;line-height:1.7;color:var(--ink2)">
-      <strong class="en">Opening Gemini AI for:</strong><strong class="ko">Gemini AI 검색 중:</strong>
-      <div style="color:var(--purple);margin:6px 0;font-weight:600">"${query}"</div>
-      <a href="${geminiUrl}" target="_blank" style="display:block;background:linear-gradient(135deg,#4285f4,#7c3aed);color:#fff;text-align:center;padding:10px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">
-        ✨ <span class="en">Open Gemini AI</span><span class="ko">Gemini AI 열기</span> →
+      <strong>${tri('Opening Gemini AI for:','Gemini AI 검색 중:','Gemini AIを開きます:')}</strong>
+      <div style="color:var(--purple);margin:6px 0;font-weight:600">"${safeQuery}"</div>
+      <a href="${geminiUrl}" target="_blank" onclick="prepareGeminiPrompt('${geminiQ}')" style="display:block;background:linear-gradient(135deg,#4285f4,#7c3aed);color:#fff;text-align:center;padding:10px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">
+        ✨ ${tri('Open Gemini AI','Gemini AI 열기','Gemini AIを開く')} →
       </a>
       <div style="margin-top:10px;font-size:0.75rem;color:var(--muted)">
-        <span class="en">Tap above to ask Gemini as a Sapporo travel expert. Best for detailed advice, recommendations, and local tips.</span>
-        <span class="ko">위 버튼으로 삿포로 여행 전문가 Gemini에게 질문하세요. 상세한 추천과 현지 팁에 최적입니다.</span>
+        ${tri('Your full travel prompt is passed in the Gemini link and copied to your clipboard. If Gemini does not prefill it, paste once with Ctrl/⌘+V.','여행 프롬프트 전체를 Gemini 링크로 전달하고 클립보드에도 자동 복사합니다. Gemini 입력창이 비어 있으면 Ctrl/⌘+V로 한 번만 붙여넣으세요.','旅行プロンプト全体をGeminiリンクに渡し、クリップボードにも自動コピーします。入力欄が空の場合はCtrl/⌘+Vで一度貼り付けてください。')}
       </div>
     </div>`;
   }
 }
+initQaLocation();
+renderQaTools();
+renderQaHistory();
+document.addEventListener('tripLanguageChanged',function(){renderQaTools();renderQaHistory();if(lastQaQuery)renderQaResult(lastQaQuery);});
 </script>
 </body>
 </html>
